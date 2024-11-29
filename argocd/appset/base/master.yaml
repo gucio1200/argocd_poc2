@@ -2,24 +2,29 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: argocd_poc
+  name: master
   namespace: argocd
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-  - git:
-      repoURL: https://github.com/gucio1200/argocd_poc.git
-      revision: main
-      directories:
-      - path: '*/*'
-      - path: 'archive/*'
-        exclude: true
-      - path: 'crd/*'
-        exclude: true
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  argocd.argoproj.io/secret-type: cluster
+              values:
+                location: '{{index .metadata.annotations "location"}}'
+                stage: '{{index .metadata.annotations "stage"}}'
+          - git:
+              repoURL: https://github.com/gucio1200/argocd_poc.git
+              revision: main
+              directories:
+              - path: '*/*/{{.values.stage}}/{{.values.location}}'
   template:
     metadata:
-      name: '{{.path.basename}}'
+      name: '{{index .path.segments 1}}-{{.values.stage}}-{{.values.location}}'
     spec:
       project: "default"
       source:
@@ -27,7 +32,7 @@ spec:
         targetRevision: main
         path: '{{.path.path}}'
       destination:
-        server: https://kubernetes.default.svc
+        server: '{{.server}}'
         namespace: '{{index .path.segments 0}}'
       syncPolicy:
         syncOptions:
