@@ -1,0 +1,67 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd_poc
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/gucio1200/argocd_poc.git
+      revision: main
+      directories:
+      - path: '*/*'
+      - path: 'archive/*'
+        exclude: true
+      - path: 'crd/*'
+        exclude: true
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/gucio1200/argocd_poc.git
+        targetRevision: main
+        path: '{{.path.path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{index .path.segments 0}}'
+      syncPolicy:
+        syncOptions:
+          - Prune=true
+          - CreateNamespace=true
+          - ServerSideApply=true
+        automated:
+          selfHeal: true
+          prune: true
+        retry:
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m0s
+          limit: 5
+      ignoreDifferences:
+        - group: monitoring.coreos.com
+          kind: ServiceMonitor
+          jqPathExpressions:
+            - '.spec.endpoints[]?.relabelings[]?.action'
+        - group: apps
+          kind: StatefulSet
+          jqPathExpressions:
+            - '.spec.volumeClaimTemplates[]?'
+        - kind: PersistentVolume
+          jqPathExpressions:
+            - '.spec.claimRef[]?'
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          jqPathExpressions:
+            - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "control-plane")
+            - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "kubernetes.azure.com/managedby")
+        - group: admissionregistration.k8s.io
+          kind: MutatingWebhookConfiguration
+          jqPathExpressions:
+            - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "control-plane")
+            - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "kubernetes.azure.com/managedby")
