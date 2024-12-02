@@ -14,9 +14,9 @@
   },
   "packageRules": [
     {
-      "description": "Per cluster PR's",
-      "matchFileNames": ["**/{{{replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}/**"],
-      "addLabels": ["{{{replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"]
+      "groupName": "int/eastus2"
+      "matchFileNames": [**/{{{groupName}}}/**],
+      "addLabels": ["{{{groupName}}}"]
     }
   ]
 }
