@@ -12,4 +12,17 @@
   "kubernetes": {
     "fileMatch": ["(k8s|lb)/.+\\.ya?ml$"]
   },
- }
+  "packageRules": [
+    {
+      "description": "Per cluster PR's",
+      "groupName": "{{{ replace '(?<=/overlays/)([^/]+/[^/]+)' '$1' packageFileDir}}}",
+      "matchBaseBranches": ["main"],
+      "matchFileNames": ["**/{{{groupName}}}/**"],
+      "addLabels": ["{{{groupName}}}"],
+      "additionalBranchPrefix": "{{{groupName}}}-",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} cluster"
+      }
+    }
+  ]
+}
