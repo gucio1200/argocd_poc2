@@ -18,7 +18,7 @@
       "groupName": "{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}",
       "baseBranches": ["main"],
       "matchFileNames": ["**/int/useast2/**"],
-      "addLabels": [""],
+      "addLabels": ["{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}"],
       "group": {
         "commitMessageTopic": "test cluster"
       },
