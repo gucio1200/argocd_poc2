@@ -16,7 +16,7 @@
     {
       "description": "Per cluster PR's",
       "groupName": "{{{ replace '(?<=/overlays/)([^/]+/[^/]+)' '$1' packageFileDir}}}",
-      "matchBaseBranches": ["main"],
+      "baseBranches": ["main"],
       "matchFileNames": ["**/{{{groupName}}}/**"],
       "addLabels": ["{{{groupName}}}"],
       "additionalBranchPrefix": "{{{groupName}}}-",
