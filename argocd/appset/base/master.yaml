@@ -22,7 +22,7 @@ spec:
               repoURL: https://github.com/gucio1200/argocd_poc.git
               revision: '{{.values.source_branch}}'
               directories:
-              - path: '*/*/{{.values.stage}}/{{.values.location}}'
+              - path: '*/*/overlays/{{.values.stage}}/{{.values.location}}'
   template:
     metadata:
       name: '{{index .path.segments 1}}-{{.values.stage}}-{{.values.location}}'
