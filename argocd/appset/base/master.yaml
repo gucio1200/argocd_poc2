@@ -19,7 +19,7 @@ spec:
                 stage: '{{index .metadata.annotations "stage"}}'
           - git:
               repoURL: https://github.com/gucio1200/argocd_poc.git
-              revision: '{{if eq .stage "prod"}}prod{{else}}main{{end}}'
+              revision: '{{if eq .values.stage "prod"}}prod{{else}}main{{end}}'
               directories:
               - path: '*/*/{{.values.stage}}/{{.values.location}}'
   template:
