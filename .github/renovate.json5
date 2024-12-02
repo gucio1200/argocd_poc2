@@ -16,7 +16,7 @@
     {
       "groupName": "int/eastus2",
       "matchFileNames": ["**/{{{groupName}}}/**"],
-      "addLabels": ["{{{groupName}}}"]
+      "addLabels": [{{{groupName}}}]
     }
   ]
 }
