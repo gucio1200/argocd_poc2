@@ -15,14 +15,11 @@
   "packageRules": [
     {
       "description": "Per cluster PR's",
-      "groupName": "{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}",
-      "baseBranches": ["main"],
       "matchFileNames": ["**/int/eastus2/**"],
       "addLabels": ["{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}"],
       "group": {
         "commitMessageTopic": "{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}} group"
-      },
-      "additionalBranchPrefix": "{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}-"
+      }
     }
   ]
 }
