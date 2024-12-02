@@ -16,7 +16,7 @@
     {
       "groupName": "int/eastus2",
       "matchFileNames": ["**/int/eastus2/**"],
-      "addLabels": ["{{{groupName}}}"],
+      "addLabels": "{{{groupName}}}",
       "group": {
         commitMessageTopic: "{{{groupName}}} group",
       },
