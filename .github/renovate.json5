@@ -16,10 +16,10 @@
     {
       "description": "Per cluster PR's",
       "groupName": "{{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}",
-      "matchFileNames": ["**/{{{groupName}}}/**"],
-      "addLabels": ["{{{groupName}}}"],
+      "matchFileNames": ["**/{{{replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}/**"],
+      "addLabels": ["{{{replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"],
       "group": {
-        commitMessageTopic: "{{{groupName}}} group",
+        commitMessageTopic: "{{{replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}} group",
       },
     }
   ]
