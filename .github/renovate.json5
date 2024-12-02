@@ -17,13 +17,15 @@
       "groupName": "int/eastus2",
       "matchFileNames": ["**/int/eastus2/**"],
       "addLabels": ["{{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"],
-      "additionalBranchPrefix": "{{{packageName}}}-"
+      "additionalBranchPrefix": "{{{packageName}}}-",
+      "separateMinorPatch": true
     },
     {
       "groupName": "int/france",
       "matchFileNames": ["**/int/france/**"],
       "addLabels": ["{{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"],
-      "additionalBranchPrefix": "{{{packageName}}}-"
+      "additionalBranchPrefix": "{{{packageName}}}-",
+      "separateMinorPatch": true
     }
   ]
 }
