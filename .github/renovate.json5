@@ -17,7 +17,7 @@
       "description": "Per cluster PR's",
       "groupName": "{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}",
       "baseBranches": ["main"],
-      "matchFileNames": ["**/{{{groupName}}}/**"],
+      "matchFileNames": ["**/int/eastus2/**"],
       "addLabels": ["{{{groupName}}}"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
