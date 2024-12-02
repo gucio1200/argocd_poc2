@@ -15,8 +15,12 @@
   "packageRules": [
     {
       "description": "Per cluster PR's",
+      "groupName": "{{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}",
       "matchFileNames": ["**/int/eastus2/**"],
-      "addLabels": ["{{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"]
+      "addLabels": ["{{{groupName}}}"],
+      "group": {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
     }
   ]
 }
