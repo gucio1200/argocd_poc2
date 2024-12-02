@@ -1,13 +1,15 @@
 {
-"$schema": https://docs.renovatebot.com/renovate-schema.json,
-"baseBranches": ["main","non-prod"],
-"extends": [
-  "github>gucio1200/renovate-config",
-],
-"helm-values": {
-  "fileMatch": [\\.ya?ml$]
-},
-"kubernetes": {
-  "fileMatch": [\\.ya?ml$]
-},
-}
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>gucio1200/renovate-config"
+  ],
+  "flux": {
+    "fileMatch": ["(k8s|lb)/.+\\.ya?ml$"]
+  },
+  "helm-values": {
+    "fileMatch": ["(k8s|lb)/.+\\.ya?ml$"]
+  },
+  "kubernetes": {
+    "fileMatch": ["(k8s|lb)/.+\\.ya?ml$"]
+  },
+ }
