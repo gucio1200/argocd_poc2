@@ -22,7 +22,7 @@
       "group": {
         "commitMessageTopic": "test cluster"
       },
-      "additionalBranchPrefix": "{{{ replace '(?<=/overlays/)([^/]+/[^/]+)' '$1' packageFileDir}}}"
+      "additionalBranchPrefix": "{{{ replace 'overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}"
     }
   ]
 }
