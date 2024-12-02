@@ -16,7 +16,7 @@
     {
       "description": "Per cluster PR's",
       "matchFileNames": ["**/int/eastus2/**"],
-      "addLabels": ["{{{ replace 'r"(?<=overlays/)([^/]+/[^/]+)"' '$1' packageFileDir}}}"]
+      "addLabels": ["{{{ replace '(?<=overlays/)([^/]+/[^/]+)' '$1' packageFileDir}}}"]
     }
   ]
 }
