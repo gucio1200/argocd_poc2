@@ -15,7 +15,7 @@
   "packageRules": [
     {
       "groupName": "int/eastus2",
-      "matchFileNames": [**/{{{groupName}}}/**],
+      "matchFileNames": ["**/{{{groupName}}}/**"],
       "addLabels": ["{{{groupName}}}"]
     }
   ]
