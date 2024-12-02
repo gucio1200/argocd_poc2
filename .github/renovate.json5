@@ -15,12 +15,8 @@
   "packageRules": [
     {
       "description": "Per cluster PR's",
-      "groupName": "{{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}",
       "matchFileNames": ["**/{{{replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}/**"],
-      "addLabels": ["{{{replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"],
-      "group": {
-        commitMessageTopic: "{{{replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}} group",
-      },
+      "addLabels": ["{{{replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"]
     }
   ]
 }
