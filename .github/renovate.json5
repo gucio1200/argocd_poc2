@@ -1,0 +1,26 @@
+{
+"$schema": https://docs.renovatebot.com/renovate-schema.json,
+"baseBranches": ["main","non-prod"],
+"extends": [
+  "github>gucio1200/renovate-config",
+],
+"helm-values": {
+  "fileMatch": [\\.ya?ml$]
+},
+"kubernetes": {
+  "fileMatch": [\\.ya?ml$]
+},
+"packageRules": [
+  {
+    "description": "Per cluster PR's",
+    "groupName": "{{{ replace '(?<=/overlays/)([^/]+/[^/]+)' '$1' packageFileDir}}}",
+    "matchBaseBranches": ["main"],
+    "matchFileNames": ["**/{{{groupName}}}/**"],
+    "addLabels": ["{{{groupName}}}"],
+    "additionalBranchPrefix": "{{{groupName}}}-",
+    "group": {
+      "commitMessageTopic": "{{{groupName}}} cluster"
+    }
+  }
+]
+}

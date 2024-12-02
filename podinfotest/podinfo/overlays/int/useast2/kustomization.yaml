@@ -5,7 +5,7 @@ kind: Kustomization
 helmCharts:
   - name: podinfo
     repo: https://stefanprodan.github.io/podinfo
-    version: "6.7.1"
+    version: "6.7.0"
     releaseName: podinfo
     includeCRDs: true
     namespace: podinfotest
