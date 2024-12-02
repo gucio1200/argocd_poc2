@@ -17,7 +17,7 @@
       "description": "Per cluster PR's",
       "groupName": "test",
       "baseBranches": ["main"],
-      "matchFileNames": ["**/test/**"],
+      "matchFileNames": ["**/int/useast2/**"],
       "addLabels": ["test"],
       "group": {
         "commitMessageTopic": "test cluster"
