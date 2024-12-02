@@ -17,10 +17,10 @@ spec:
               values:
                 location: '{{index .metadata.annotations "location"}}'
                 stage: '{{index .metadata.annotations "stage"}}'
-                source-branch: '{{index .metadata.annotations "source-branch"}}'
+                source_branch: '{{index .metadata.annotations "source-branch"}}'
           - git:
               repoURL: https://github.com/gucio1200/argocd_poc.git
-              revision: '{{.values.source-branch}}'
+              revision: '{{.values.source_branch}}'
               directories:
               - path: '*/*/{{.values.stage}}/{{.values.location}}'
   template:
@@ -29,12 +29,12 @@ spec:
       annotations:
         argocd/location: '{{.values.location}}'
         argocd/stage: '{{.values.stage}}'
-        argocd/source-branch: '{{.values.source-branch}}'
+        argocd/source_branch: '{{.values.source_branch}}'
     spec:
       project: "default"
       source:
         repoURL: https://github.com/gucio1200/argocd_poc.git
-        targetRevision: '{{.values.source-branch}}'
+        targetRevision: '{{.values.source_branch}}'
         path: '{{.path.path}}'
       destination:
         server: '{{.server}}'
