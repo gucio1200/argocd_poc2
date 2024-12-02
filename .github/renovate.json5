@@ -19,7 +19,8 @@
       "addLabels": ["{{{groupName}}}"],
       "group": {
         commitMessageTopic: "{{{groupName}}} group",
-      }
+      },
+      "additionalBranchPrefix": "{{{groupName}}}-"
     }
   ]
 }
