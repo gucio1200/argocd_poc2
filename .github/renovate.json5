@@ -16,11 +16,11 @@
     {
       "groupName": "int/eastus2",
       "matchFileNames": ["**/int/eastus2/**"],
-      "addLabels": "{{{groupName}}}",
+      "addLabels": ["{{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"],
       "group": {
         commitMessageTopic: "{{{groupName}}} group",
       },
-      "additionalBranchPrefix": "{{{groupName}}}-"
+      "additionalBranchPrefix": "{{{packageName}}}-"
     }
   ]
 }
