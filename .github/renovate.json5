@@ -15,13 +15,14 @@
   "packageRules": [
     {
       "description": "Per cluster PR's",
-      "groupName": "test",
+      "groupName": "{{{ replace '(?<=/overlays/)([^/]+/[^/]+)' '$1' packageFileDir}}}",
       "baseBranches": ["main"],
       "matchFileNames": ["**/int/useast2/**"],
-      "addLabels": ["test"],
+      "addLabels": [""],
       "group": {
         "commitMessageTopic": "test cluster"
-      }
+      },
+      "additionalBranchPrefix": "{{{ replace '(?<=/overlays/)([^/]+/[^/]+)' '$1' packageFileDir}}}"
     }
   ]
 }
