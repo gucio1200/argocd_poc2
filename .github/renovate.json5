@@ -18,11 +18,11 @@
       "groupName": "{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}",
       "baseBranches": ["main"],
       "matchFileNames": ["**/int/eastus2/**"],
-      "addLabels": ["{{{groupName}}}"],
+      "addLabels": ["{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}"],
       "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
+        "commitMessageTopic": "{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}} group"
       },
-      "additionalBranchPrefix": "{{{groupName}}}-"
+      "additionalBranchPrefix": "{{{ replace '/overlays/([^/]+/[^/]+)' '$1' packageFileDir}}}-"
     }
   ]
 }
