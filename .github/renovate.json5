@@ -14,18 +14,10 @@
   },
   "packageRules": [
     {
-      "groupName": "int/eastus2",
-      "matchFileNames": ["**/int/eastus2/**"],
-      "addLabels": ["{{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"],
-      "additionalBranchPrefix": "{{{packageName}}}-",
-      "separateMinorPatch": true
-    },
-    {
-      "groupName": "int/france",
-      "matchFileNames": ["**/int/france/**"],
-      "addLabels": ["{{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}}"],
-      "additionalBranchPrefix": "{{{packageName}}}-",
-      "separateMinorPatch": true
+      "matchFileNames": ["**/overlays/**"],
+      "additionalBranchPrefix": "{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir }}/",
+      "commitMessageSuffix": " - {{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir }}",
+      "addLabels": ["{{ replace '.*overlays/([^/]+/[^/]+)$' '$1' packageFileDir}}"]
     }
   ]
 }
