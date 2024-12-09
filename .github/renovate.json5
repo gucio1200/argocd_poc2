@@ -15,9 +15,9 @@
   "packageRules": [
     {
       "matchFileNames": ["**/overlays/**"],
-      "additionalBranchPrefix": "{{ replace '.*overlays/([^/]+/[^/]+)/$' '$1' packageFileDir }}/{{ replace '.*overlays/.*/.*/([^/]+)$' '$1' packageFileDir }}/",
-      "commitMessageSuffix": " - {{ replace '.*overlays/([^/]+/[^/]+)/$' '$1' packageFileDir }}/{{ replace '.*overlays/.*/.*/([^/]+)$' '$1' packageFileDir }}",
-      "addLabels": ["{{ replace '.*overlays/([^/]+/[^/]+)/$' '$1' packageFileDir}}","{{ replace '.*overlays/.*/.*/([^/]+)$' '$1' packageFileDir }}"]
+      "additionalBranchPrefix": "{{ replace '.*overlays/([^/]+/[^/]+/[^/]+)$' '$1' packageFileDir }}/",
+      "commitMessageSuffix": " - {{ replace '.*overlays/([^/]+/[^/]+/[^/]+)/$' '$1' packageFileDir }}",
+      "addLabels": ["{{ replace '.*overlays/([^/]+/[^/]+/[^/]+)$' '$1' packageFileDir}}"]
     }
   ]
 }
