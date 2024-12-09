@@ -39,6 +39,7 @@ spec:
           - Prune=true
           - CreateNamespace=true
           - ServerSideApply=true
+          - PrunePropagationPolicy=background
         automated:
           selfHeal: true
           prune: true
