@@ -17,24 +17,19 @@ spec:
               values:
                 location: '{{index .metadata.annotations "location"}}'
                 stage: '{{index .metadata.annotations "stage"}}'
-                source_branch: '{{index .metadata.annotations "source-branch"}}'
           - git:
               repoURL: https://github.com/gucio1200/argocd_poc.git
-              revision: '{{.values.source_branch}}'
+              revision: '{{if eq .values.stage "prod"}}prod{{else}}main{{end}}'
               directories:
-              - path: '*/*/overlays/{{.values.stage}}/{{.values.location}}'
+              - path: '*/*/overlays/{{.values.stage}}/{{.values.location}}/{{.name}}'
   template:
     metadata:
       name: '{{index .path.segments 1}}-{{.values.stage}}-{{.values.location}}'
-      annotations:
-        argocd/location: '{{.values.location}}'
-        argocd/stage: '{{.values.stage}}'
-        argocd/source_branch: '{{.values.source_branch}}'
     spec:
       project: "default"
       source:
         repoURL: https://github.com/gucio1200/argocd_poc.git
-        targetRevision: '{{.values.source_branch}}'
+        targetRevision: '{{if eq .values.stage "prod"}}prod{{else}}main{{end}}'
         path: '{{.path.path}}'
       destination:
         server: '{{.server}}'
