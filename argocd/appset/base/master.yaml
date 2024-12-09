@@ -24,7 +24,7 @@ spec:
               - path: '*/*/overlays/{{.values.stage}}/{{.values.location}}/{{.name}}'
   template:
     metadata:
-      name: '{{index .path.segments 1}}-{{.values.stage}}-{{.values.location}}'
+      name: '{{index .path.segments 1}}-{{.values.stage}}-{{.values.location}}-{{.name}}'
     spec:
       project: "default"
       source:
