@@ -4,6 +4,8 @@ kind: ApplicationSet
 metadata:
   name: master
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
@@ -39,7 +41,6 @@ spec:
           - Prune=true
           - CreateNamespace=true
           - ServerSideApply=true
-          - PrunePropagationPolicy=background
         automated:
           selfHeal: true
           prune: true
