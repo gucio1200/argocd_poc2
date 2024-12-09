@@ -4,8 +4,6 @@ kind: ApplicationSet
 metadata:
   name: master
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io/background
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
