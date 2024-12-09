@@ -17,11 +17,26 @@ spec:
               values:
                 location: '{{index .metadata.annotations "location"}}'
                 stage: '{{index .metadata.annotations "stage"}}'
+              template:
+                metadata: {}
+                spec:
+                  destination: {}
+                  project: ''
           - git:
               repoURL: https://github.com/gucio1200/argocd_poc.git
               revision: '{{if eq .values.stage "prod"}}prod{{else}}main{{end}}'
               directories:
               - path: '*/*/overlays/{{.values.stage}}/{{.values.location}}/{{.name}}'
+              template:
+                metadata: {}
+                spec:
+                  destination: {}
+                  project: ''
+        template:
+          metadata: {}
+          spec:
+            destination: {}
+            project: ''
   template:
     metadata:
       name: '{{index .path.segments 1}}-{{.values.stage}}-{{.values.location}}-{{.name}}'
