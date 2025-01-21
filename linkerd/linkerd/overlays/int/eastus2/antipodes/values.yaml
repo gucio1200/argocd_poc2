@@ -7,7 +7,7 @@ identity:
   externalCA: true
   issuer:
     scheme: kubernetes.io/tls
-    issuanceLifetime: 2h0m0s
+    issuanceLifetime: 1h0m0s
 
 controllerReplicas: 3
 
