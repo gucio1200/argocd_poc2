@@ -14,7 +14,8 @@ logs:
     enabled: true
 ports:
   traefik:
-    expose: true
+    expose:
+      default: true
 ingressRoute:
   dashboard:
     enabled: true
