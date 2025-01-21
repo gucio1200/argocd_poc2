@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./ca.yaml
+
+helmCharts:
+  - name: linkerd-control-plane
+    repo: https://helm.linkerd.io/stable
+    version: "1.16.11"
+    releaseName: linkerd
+    includeCRDs: true
+    namespace: linkerd
+    valuesFile: ./values.yaml
