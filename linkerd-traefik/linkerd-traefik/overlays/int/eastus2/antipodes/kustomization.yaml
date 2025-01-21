@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: traefik
+    repo: https://traefik.github.io/charts
+    version: "33.0.0"
+    releaseName: linkerd-traefik
+    includeCRDs: true
+    namespace: linkerd-traefik
+    valuesFile: ./values.yaml
