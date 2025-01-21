@@ -19,8 +19,8 @@ enablePodDisruptionBudget: true
 
 highAvailability: true
 
-podAnnotations:
-  configmap.reloader.stakater.com/reload: "linkerd-identity-trust-roots"
+#podAnnotations:
+#  configmap.reloader.stakater.com/reload: "linkerd-identity-trust-roots"
 clusterDomain: cluster.local
 #clusterNetworks: "10.244.0.0/16,10.0.0.0/16"
 controllerLogLevel: debug
