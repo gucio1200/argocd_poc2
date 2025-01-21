@@ -70,3 +70,33 @@ spec:
           jqPathExpressions:
             - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "control-plane")
             - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "kubernetes.azure.com/managedby")
+        - kind: Secret
+          name: linkerd-proxy-injector-k8s-tls
+          jsonPointers:
+            - /data/tls.crt
+            - /data/tls.key
+        - kind: Secret
+          name: linkerd-sp-validator-k8s-tls
+          jsonPointers:
+            - /data/tls.crt
+            - /data/tls.key
+        - kind: Secret
+          name: linkerd-policy-validator-k8s-tls
+          jsonPointers:
+            - /data/tls.crt
+            - /data/tls.key
+        - group: admissionregistration.k8s.io/
+          kind: MutatingWebhookConfiguration
+          name: linkerd-proxy-injector-webhook-config
+          jsonPointers:
+            - /webhooks
+        - group: admissionregistration.k8s.io/
+          kind: ValidatingWebhookConfiguration
+          name: linkerd-sp-validator-webhook-config
+          jsonPointers:
+            - /webhooks
+        - group: admissionregistration.k8s.io/
+          kind: ValidatingWebhookConfiguration
+          name: linkerd-policy-validator-webhook-config
+          jsonPointers:
+            - /webhooks
