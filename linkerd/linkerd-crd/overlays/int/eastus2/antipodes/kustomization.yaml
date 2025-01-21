@@ -4,8 +4,8 @@ kind: Kustomization
 
 helmCharts:
   - name: linkerd-crds
-    repo: https://helm.linkerd.io/stable
-    version: "1.8.0"
+    repo: https://helm.linkerd.io/edge
+    version: "2025.1.1"
     releaseName: linkerd-crd
     includeCRDs: true
     namespace: kube-system
