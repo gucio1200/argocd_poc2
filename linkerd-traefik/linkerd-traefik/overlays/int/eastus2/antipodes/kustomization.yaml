@@ -7,6 +7,6 @@ helmCharts:
     repo: https://traefik.github.io/charts
     version: "33.0.0"
     releaseName: linkerd-traefik
-    includeCRDs: true
+    includeCRDs: false
     namespace: linkerd-traefik
     valuesFile: ./values.yaml
