@@ -6,7 +6,7 @@ helmCharts:
   - name: podinfo
     repo: https://stefanprodan.github.io/podinfo
     version: "6.7.1"
-    releaseName: podinfo
+    releaseName: podinfo-linkerd
     includeCRDs: true
     namespace: linkerd-test
     valuesFile: ./../../../../base/values.yaml
