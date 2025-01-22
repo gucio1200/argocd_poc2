@@ -5,7 +5,6 @@ metadata:
   namespace: cert-manager
 spec:
   selfSigned: {}
-
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -16,6 +15,8 @@ spec:
   isCA: true
   commonName: root.linkerd.cluster.local
   secretName: linkerd-identity-trust-roots
+  duration: 175200h
+  renewBefore: 87600h
   privateKey:
     algorithm: ECDSA
     size: 256
@@ -23,7 +24,6 @@ spec:
     name: linkerd-self-signed-issuer
     kind: ClusterIssuer
     group: cert-manager.io
-
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -33,21 +33,6 @@ metadata:
 spec:
   ca:
     secretName: linkerd-identity-trust-roots
-
----
-apiVersion: trust.cert-manager.io/v1alpha1
-kind: Bundle
-metadata:
-  name: linkerd-identity-trust-roots
-spec:
-  sources:
-  - secret:
-      name: "linkerd-identity-trust-roots"
-      key: "ca.crt"
-  target:
-    configMap:
-      key: "ca-bundle.crt"
-
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -56,21 +41,97 @@ metadata:
   namespace: linkerd
 spec:
   secretName: linkerd-identity-issuer
-  duration: 2h0m0s
-  renewBefore: 1h0m0s
+  duration: 24000h
+  renewBefore: 73h
   issuerRef:
     name: linkerd-trust-anchor
     kind: ClusterIssuer
   commonName: identity.linkerd.cluster.local
   dnsNames:
-  - identity.linkerd.cluster.local
+    - identity.linkerd.cluster.local
   isCA: true
   privateKey:
     algorithm: ECDSA
   usages:
-  - cert sign
-  - crl sign
-  - server auth
-  - client auth
-
-#test
+    - cert sign
+    - crl sign
+    - server auth
+    - client auth
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: linkerd-policy-validator
+  namespace: linkerd
+spec:
+  secretName: linkerd-policy-validator-k8s-tls
+  duration: 24000h
+  renewBefore: 73h
+  issuerRef:
+    name: linkerd-trust-anchor
+    kind: ClusterIssuer
+  commonName: linkerd-policy-validator.linkerd.svc
+  dnsNames:
+    - linkerd-policy-validator.linkerd.svc
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+    encoding: PKCS8
+  usages:
+    - server auth
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: linkerd-proxy-injector
+  namespace: linkerd
+spec:
+  secretName: linkerd-proxy-injector-k8s-tls
+  duration: 24000h
+  renewBefore: 73h
+  issuerRef:
+    name: linkerd-trust-anchor
+    kind: ClusterIssuer
+  commonName: linkerd-proxy-injector.linkerd.svc
+  dnsNames:
+    - linkerd-proxy-injector.linkerd.svc
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+  usages:
+    - server auth
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: linkerd-sp-validator
+  namespace: linkerd
+spec:
+  secretName: linkerd-sp-validator-k8s-tls
+  duration: 24000h
+  renewBefore: 73h
+  issuerRef:
+    name: linkerd-trust-anchor
+    kind: ClusterIssuer
+  commonName: linkerd-sp-validator.linkerd.svc
+  dnsNames:
+    - linkerd-sp-validator.linkerd.svc
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+  usages:
+    - server auth
+---
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: linkerd-identity-trust-roots
+  namespace: linkerd
+spec:
+  sources:
+    - secret:
+        name: "linkerd-identity-trust-roots"
+        key: "ca.crt"
+  target:
+    configMap:
+      key: "ca-bundle.crt"
