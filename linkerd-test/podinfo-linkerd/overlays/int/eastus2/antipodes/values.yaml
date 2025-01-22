@@ -6,6 +6,10 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
+
+nodeSelector:
+  topology.kubernetes.io/zone: m
+
 #  tls:
 #    - hosts:
 #        - *host
