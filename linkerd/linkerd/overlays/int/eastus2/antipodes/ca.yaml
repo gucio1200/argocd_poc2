@@ -1,3 +1,4 @@
+---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -92,16 +93,16 @@ spec:
     kind: ClusterIssuer
   commonName: identity.linkerd.cluster.local
   dnsNames:
-  - identity.linkerd.cluster.local
+    - identity.linkerd.cluster.local
   isCA: true
   privateKey:
-     algorithm: ECDSA
-     rotationPolicy: Always
+    algorithm: ECDSA
+    rotationPolicy: Always
   usages:
-   - cert sign
-   - crl sign
-   - server auth
-   - client auth
+    - cert sign
+    - crl sign
+    - server auth
+    - client auth
 
 ---
 apiVersion: trust.cert-manager.io/v1alpha1
@@ -111,9 +112,9 @@ metadata:
   namespace: cert-manager
 spec:
   sources:
-  - secret:
-      name: linkerd-identity-issuer
-      key: "ca.crt"
+    - secret:
+        name: linkerd-identity-issuer
+        key: "ca.crt"
   target:
     configMap:
       key: "ca-bundle.crt"
@@ -136,16 +137,16 @@ spec:
     kind: ClusterIssuer
   commonName: identity.linkerd.cluster.local
   dnsNames:
-  - identity.linkerd.cluster.local
+    - identity.linkerd.cluster.local
   isCA: true
   privateKey:
     algorithm: ECDSA
     rotationPolicy: Always
   usages:
-  - cert sign
-  - crl sign
-  - server auth
-  - client auth
+    - cert sign
+    - crl sign
+    - server auth
+    - client auth
 
 ---
 apiVersion: cert-manager.io/v1
