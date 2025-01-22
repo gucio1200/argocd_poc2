@@ -167,6 +167,8 @@ spec:
   commonName: linkerd-policy-validator.linkerd.svc
   dnsNames:
     - linkerd-policy-validator.linkerd.svc
+  privateKey:
+    rotationPolicy: Always
   isCA: false
   usages:
     - server auth
@@ -190,6 +192,8 @@ spec:
   commonName: linkerd-proxy-injector.linkerd.svc
   dnsNames:
     - linkerd-proxy-injector.linkerd.svc
+  privateKey:
+    rotationPolicy: Always
   isCA: false
   usages:
     - server auth
@@ -213,6 +217,8 @@ spec:
   commonName: linkerd-sp-validator.linkerd.svc
   dnsNames:
     - linkerd-sp-validator.linkerd.svc
+  privateKey:
+    rotationPolicy: Always
   isCA: false
   usages:
     - server auth
