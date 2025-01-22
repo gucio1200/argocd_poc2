@@ -1,6 +1,6 @@
 ingress:
   enabled: true
-  className: "nginx"
+  className: "traefik-linkerd"
   hosts:
     - host: &host podinfo-linkerd.k8sj.io
       paths:
