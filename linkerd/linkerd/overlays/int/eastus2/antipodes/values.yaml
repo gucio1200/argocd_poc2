@@ -70,7 +70,7 @@ proxy:
 profileValidator:
   namespaceSelector:
     matchExpressions:
-      - key: config.linkerd.io/admission-webhooks
+      - key: linkerd.io/inject
         operator: In
         values:
           - enabled
