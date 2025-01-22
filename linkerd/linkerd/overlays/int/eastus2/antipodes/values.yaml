@@ -11,16 +11,16 @@ identity:
     issuanceLifetime: 1h0m0s
 
 policyValidator:
-  externalSecret: "true"
-  injectCaFrom: "linkerd/linkerd-policy-validator"
+  externalSecret: true
+  injectCaFrom: linkerd/linkerd-policy-validator
 
 proxyInjector:
-  externalSecret: "true"
-  injectCaFrom: "linkerd/linkerd-proxy-injector"
+  externalSecret: true
+  injectCaFrom: linkerd/linkerd-proxy-injector
 
 profileValidator:
-  externalSecret: "true"
-  injectCaFrom: "linkerd/linkerd-sp-validator"
+  externalSecret: true
+  injectCaFrom: linkerd/linkerd-sp-validator
 
 
 
