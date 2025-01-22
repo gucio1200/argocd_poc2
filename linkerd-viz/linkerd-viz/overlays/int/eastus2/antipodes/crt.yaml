@@ -8,8 +8,8 @@ spec:
   secretTemplate:
     labels:
       app.kubernetes.io/part-of: Linkerd
-  duration: 6h #168h
-  renewBefore: 3h #24h
+  duration: 80640h
+  renewBeforePercentage: 25
   issuerRef:
     name: linkerd-webhook-issuer
     kind: ClusterIssuer
@@ -31,8 +31,8 @@ spec:
   secretTemplate:
     labels:
       app.kubernetes.io/part-of: Linkerd
-  duration: 6h #168h
-  renewBefore: 3h #24h
+  duration: 80640h
+  renewBeforePercentage: 25
   issuerRef:
     name: linkerd-webhook-issuer
     kind: ClusterIssuer
