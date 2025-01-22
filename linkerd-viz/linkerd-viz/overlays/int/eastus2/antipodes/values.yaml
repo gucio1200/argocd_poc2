@@ -1,7 +1,12 @@
 prometheusUrl: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
 grafanaUrl: http://grafana.monitoring.svc.cluster.local:80
+nodeSelector:
+  topology.kubernetes.io/zone: m
+
 metricsAPI:
   logLevel: info
+  nodeSelector:
+    topology.kubernetes.io/zone: m
 tap:
   externalSecret: true
   injectCaFrom: linkerd-viz/tap
@@ -36,5 +41,3 @@ grafana:
 # https://linkerd.io/2.12/tasks/external-prometheus/
 prometheus:
   enabled: false
-nodeSelector:
-  topology.kubernetes.io/zone: m
