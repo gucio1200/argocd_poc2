@@ -49,17 +49,6 @@ webhookFailurePolicy: Fail #Ignore # Fail this will preven pod scheaduling if li
 
 prometheusUrl: "http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090"
 
-policyController:
-  # -- The default allow policy to use when no `Server` selects a pod.  One of: "all-authenticated",
-  # "all-unauthenticated", "cluster-authenticated", "cluster-unauthenticated", "deny"
-  # @default -- "all-unauthenticated"
-  defaultAllowPolicy: "cluster-authenticated"
-
-  logLevel: info
-
-  probeNetworks:
-    - 0.0.0.0/0
-
 proxyInit:
   iptablesMode: nft
   logLevel: "info"
@@ -71,6 +60,7 @@ proxyInit:
 # proxy configuration
 proxy:
   logLevel: info
+  defaultInboundPolicy: "cluster-authenticated"
   # -- Enable service profiles for non-Kubernetes services
   enableExternalProfiles: true
   # -- Default set of opaque ports
