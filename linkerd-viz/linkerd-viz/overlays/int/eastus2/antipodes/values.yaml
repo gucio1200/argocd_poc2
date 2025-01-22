@@ -31,3 +31,5 @@ grafana:
 # https://linkerd.io/2.12/tasks/external-prometheus/
 prometheus:
   enabled: false
+nodeSelector:
+  topology.kubernetes.io/zone: m
