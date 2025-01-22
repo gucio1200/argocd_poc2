@@ -23,7 +23,7 @@ highAvailability: true
 #  configmap.reloader.stakater.com/reload: "linkerd-identity-trust-roots"
 clusterDomain: cluster.local
 #clusterNetworks: "10.244.0.0/16,10.0.0.0/16"
-controllerLogLevel: debug
+controllerLogLevel: info
 controllerLogFormat: plain
 controlPlaneTracing: false
 controlPlaneTracingNamespace: linkerd-jaeger
@@ -39,14 +39,14 @@ policyController:
   # @default -- "all-unauthenticated"
   defaultAllowPolicy: "all-unauthenticated"
 
-  logLevel: debug
+  logLevel: info
 
   probeNetworks:
     - 0.0.0.0/0
 
 proxyInit:
   iptablesMode: nft
-  logLevel: "debug"
+  logLevel: "info"
   # -- Default set of outbound ports to skip via iptables
   # - Galera (4567,4568)
   # k3s issue https://github.com/linkerd/linkerd2/issues/7970
@@ -54,7 +54,7 @@ proxyInit:
 
 # proxy configuration
 proxy:
-  logLevel: debug
+  logLevel: info
   # -- Enable service profiles for non-Kubernetes services
   enableExternalProfiles: true
   # -- Default set of opaque ports
