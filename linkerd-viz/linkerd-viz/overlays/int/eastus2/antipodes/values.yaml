@@ -3,6 +3,8 @@ grafanaUrl: http://grafana.monitoring.svc.cluster.local:80
 metricsAPI:
   logLevel: info
 tap:
+  externalSecret: true
+  injectCaFrom: linkerd-viz/tap
   resources:
     cpu:
       limit: 50m
@@ -11,6 +13,8 @@ tap:
       limit: 100Mi
       request: 50Mi
 tapInjector:
+  externalSecret: true
+  injectCaFrom: linkerd-viz/tap-injector
   resources:
     cpu:
       limit: 50m
@@ -19,6 +23,7 @@ tapInjector:
       limit: 100Mi
       request: 50Mi
 dashboard:
+  enforcedHostRegexp: .*
   resources:
     cpu:
       limit: 50m
