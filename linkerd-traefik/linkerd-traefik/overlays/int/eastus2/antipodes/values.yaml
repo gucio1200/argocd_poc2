@@ -1,6 +1,6 @@
-deployment:
-  podAnnotations:
-    linkerd.io/inject: ingress
+#deployment:
+#  podAnnotations:
+#    linkerd.io/inject: ingress
 ingressClass:
   enabled: true
   isDefaultClass: false
