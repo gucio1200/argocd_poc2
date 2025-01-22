@@ -6,8 +6,8 @@ resources:
 
 helmCharts:
   - name: linkerd-control-plane
-    repo: https://helm.linkerd.io/edge
-    version: "2025.1.1"
+    repo: https://helm.linkerd.io/stable
+    version: "1.16.11"
     releaseName: linkerd
     includeCRDs: true
     namespace: linkerd
