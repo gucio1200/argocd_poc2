@@ -30,7 +30,7 @@ controlPlaneTracing: false
 controlPlaneTracingNamespace: linkerd-jaeger
 enablePodAntiAffinity: true
 
-webhookFailurePolicy: Fail #Ignore # Fail this will preven pod scheaduling if linkerd wont patch pod with injector
+webhookFailurePolicy: Ignore #Ignore # Fail this will preven pod scheaduling if linkerd wont patch pod with injector
 
 #prometheusUrl: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
 
@@ -68,18 +68,18 @@ proxy:
   # - Memcached (11211) clients do not issue any preamble, which breaks detection
   opaquePorts: "25,587,3306,4444,5432,6379,9300,11211"
 
-profileValidator:
-  namespaceSelector:
-    matchExpressions:
-      - key: linkerd.io/inject
-        operator: In
-        values:
-          - enabled
+#profileValidator:
+#  namespaceSelector:
+#    matchExpressions:
+#      - key: linkerd.io/inject
+#        operator: In
+#        values:
+#          - enabled
 
-policyValidator:
-  namespaceSelector:
-    matchExpressions:
-      - key: linkerd.io/inject
-        operator: In
-        values:
-          - enabled
+#policyValidator:
+#  namespaceSelector:
+#    matchExpressions:
+#      - key: linkerd.io/inject
+#        operator: In
+#        values:
+#          - enabled
