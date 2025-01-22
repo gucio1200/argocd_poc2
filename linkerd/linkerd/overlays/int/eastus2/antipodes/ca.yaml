@@ -15,8 +15,8 @@ metadata:
   namespace: cert-manager
 spec:
   isCA: true
-  duration: 336h
-  renewBefore: 24h
+  duration: 6h #336h
+  renewBefore: 3h #24h
   issuerRef:
     name: linkerd-self-signed
     kind: ClusterIssuer
@@ -40,8 +40,8 @@ metadata:
   namespace: cert-manager
 spec:
   isCA: true
-  duration: 336h
-  renewBefore: 24h
+  duration: 6h #336h
+  renewBefore: 3h #24h
   issuerRef:
     name: linkerd-self-signed
     kind: ClusterIssuer
@@ -86,8 +86,8 @@ spec:
   secretTemplate:
     labels:
       app.kubernetes.io/part-of: Linkerd
-  duration: 336h
-  renewBefore: 24h
+  duration: 6h #336h
+  renewBefore: 3h #24h
   issuerRef:
     name: linkerd-trust-anchor
     kind: ClusterIssuer
@@ -130,8 +130,8 @@ spec:
   secretTemplate:
     labels:
       app.kubernetes.io/part-of: Linkerd
-  duration: 168h
-  renewBefore: 24h
+  duration: 6h #168h
+  renewBefore: 3h #24h
   issuerRef:
     name: linkerd-trust-anchor
     kind: ClusterIssuer
@@ -159,8 +159,8 @@ spec:
   secretTemplate:
     labels:
       app.kubernetes.io/part-of: Linkerd
-  duration: 168h
-  renewBefore: 24h
+  duration: 6h #168h
+  renewBefore: 3h #24h
   issuerRef:
     name: linkerd-webhook-issuer
     kind: ClusterIssuer
@@ -184,8 +184,8 @@ spec:
   secretTemplate:
     labels:
       app.kubernetes.io/part-of: Linkerd
-  duration: 168h
-  renewBefore: 24h
+  duration: 6h #168h
+  renewBefore: 3h #24h
   issuerRef:
     name: linkerd-webhook-issuer
     kind: ClusterIssuer
@@ -209,8 +209,8 @@ spec:
   secretTemplate:
     labels:
       app.kubernetes.io/part-of: Linkerd
-  duration: 168h
-  renewBefore: 24h
+  duration: 6h #168h
+  renewBefore: 3h #24h
   issuerRef:
     name: linkerd-webhook-issuer
     kind: ClusterIssuer
