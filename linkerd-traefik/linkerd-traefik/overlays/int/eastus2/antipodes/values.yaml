@@ -9,6 +9,10 @@ providers:
   kubernetesIngress:
     publishedService:
       enabled: true
+
+nodeSelector:
+  topology.kubernetes.io/zone: m
+
 logs:
   access:
     enabled: true
