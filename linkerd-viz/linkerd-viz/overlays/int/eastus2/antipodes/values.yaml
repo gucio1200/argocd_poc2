@@ -23,7 +23,7 @@ tapInjector:
       limit: 100Mi
       request: 50Mi
 dashboard:
-  enforcedHostRegexp: .*
+#  enforcedHostRegexp: .*
   resources:
     cpu:
       limit: 50m
