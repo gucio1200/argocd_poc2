@@ -60,7 +60,7 @@ proxyInit:
 # proxy configuration
 proxy:
   logLevel: info
-  defaultInboundPolicy: "cluster-authenticated"
+  defaultInboundPolicy: "all-unauthenticated"
   # -- Enable service profiles for non-Kubernetes services
   enableExternalProfiles: true
   # -- Default set of opaque ports
