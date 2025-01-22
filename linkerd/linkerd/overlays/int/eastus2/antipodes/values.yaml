@@ -44,7 +44,7 @@ controlPlaneTracing: false
 controlPlaneTracingNamespace: linkerd-jaeger
 enablePodAntiAffinity: true
 
-webhookFailurePolicy: Ignore #Ignore # Fail this will preven pod scheaduling if linkerd wont patch pod with injector
+#webhookFailurePolicy: Ignore #Ignore # Fail this will preven pod scheaduling if linkerd wont patch pod with injector
 
 #prometheusUrl: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
 
