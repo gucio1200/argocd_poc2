@@ -5,4 +5,5 @@ metadata:
   annotations:
     config.linkerd.io/proxy-await: "enabled"
     linkerd.io/inject: "enabled"
+    config.linkerd.io/default-inbound-policy: "cluster-authenticated"
 
