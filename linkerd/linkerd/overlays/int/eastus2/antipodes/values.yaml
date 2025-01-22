@@ -10,6 +10,20 @@ identity:
     clockSkewAllowance: 60s
     issuanceLifetime: 1h0m0s
 
+policyValidator:
+  externalSecret: "true"
+  injectCaFrom: "linkerd/linkerd-policy-validator"
+
+proxyInjector:
+  externalSecret: "true"
+  injectCaFrom: "linkerd/linkerd-proxy-injector"
+
+profileValidator:
+  externalSecret: "true"
+  injectCaFrom: "linkerd/linkerd-sp-validator"
+
+
+
 controllerReplicas: 3
 
 controller:
