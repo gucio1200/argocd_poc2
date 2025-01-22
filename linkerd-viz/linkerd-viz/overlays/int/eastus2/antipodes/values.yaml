@@ -1,0 +1,33 @@
+prometheusUrl: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
+grafanaUrl: http://grafana.monitoring.svc.cluster.local:80
+metricsAPI:
+  logLevel: info
+tap:
+  resources:
+    cpu:
+      limit: 50m
+      request: 10m
+    memory:
+      limit: 100Mi
+      request: 50Mi
+tapInjector:
+  resources:
+    cpu:
+      limit: 50m
+      request: 10m
+    memory:
+      limit: 100Mi
+      request: 50Mi
+dashboard:
+  resources:
+    cpu:
+      limit: 50m
+      request: 10m
+    memory:
+      limit: 100Mi
+      request: 50Mi
+grafana:
+  enabled: false
+# https://linkerd.io/2.12/tasks/external-prometheus/
+prometheus:
+  enabled: false

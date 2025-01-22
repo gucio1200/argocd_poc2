@@ -47,7 +47,7 @@ enablePodAntiAffinity: true
 
 webhookFailurePolicy: Fail #Ignore # Fail this will preven pod scheaduling if linkerd wont patch pod with injector
 
-#prometheusUrl: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
+prometheusUrl: "http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090"
 
 policyController:
   # -- The default allow policy to use when no `Server` selects a pod.  One of: "all-authenticated",
