@@ -22,7 +22,8 @@ profileValidator:
   externalSecret: true
   injectCaFrom: linkerd/linkerd-sp-validator
 
-
+nodeSelector:
+  topology.kubernetes.io/zone: m
 
 controllerReplicas: 3
 
