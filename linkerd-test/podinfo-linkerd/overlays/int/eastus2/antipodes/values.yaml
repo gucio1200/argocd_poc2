@@ -6,7 +6,7 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls:
-    - hosts:
-        - *host
-      secretName: podinfo-tls
+#  tls:
+#    - hosts:
+#        - *host
+#      secretName: podinfo-tls
