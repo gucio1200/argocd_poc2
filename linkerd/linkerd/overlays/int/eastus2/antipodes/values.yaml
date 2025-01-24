@@ -1,3 +1,7 @@
+podAnnotations:
+  secret.reloader.stakater.com/reload: "linkerd-proxy-injector-k8s-tls,linkerd-identity-issuer,linkerd-sp-validator-k8s-tls,linkerd-policy-validator-k8s-tls"
+  configmap.reloader.stakater.com/reload: "linkerd-config,linkerd-identity-trust-roots,linkerd-identity-trust-roots"
+
 destinationController:
   podAnnotations:
     secret.reloader.stakater.com/reload: "linkerd-sp-validator-k8s-tls,linkerd-policy-validator-k8s-tls"
