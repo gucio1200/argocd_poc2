@@ -1,3 +1,6 @@
+podAnnotations:
+  reloader.stakater.com/auto: "true"
+
 deploymentStrategy:
   rollingUpdate:
     maxUnavailable: 1
