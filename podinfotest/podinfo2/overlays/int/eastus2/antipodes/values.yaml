@@ -1,5 +1,5 @@
 ingress:
-  enabled: true
+  enabled: false
   className: "nginx"
   hosts:
     - host: &host podinfo.k8sj.io
