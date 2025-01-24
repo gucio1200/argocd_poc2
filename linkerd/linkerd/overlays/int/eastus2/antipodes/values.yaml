@@ -1,5 +1,6 @@
-podAnnotations:
-  reloader.stakater.com/auto: "true"
+destinationController:
+  podAnnotations:
+    secret.reloader.stakater.com/reload: "linkerd-sp-validator-k8s-tls,linkerd-policy-validator-k8s-tls"
 
 deploymentStrategy:
   rollingUpdate:
@@ -7,6 +8,9 @@ deploymentStrategy:
     maxSurge: 25%
 
 identity:
+  podAnnotations:
+  secret.reloader.stakater.com/reload: "linkerd-identity-issuer"
+  configmap.reloader.stakater.com/reload: "linkerd-identity-trust-roots"
   externalCA: true
   issuer:
     scheme: kubernetes.io/tls
@@ -18,6 +22,9 @@ policyValidator:
   injectCaFrom: linkerd/linkerd-policy-validator
 
 proxyInjector:
+  podAnnotations:
+    configmap.reloader.stakater.com/reload: "linkerd-config,linkerd-identity-trust-roots"
+    secret.reloader.stakater.com/reload: "linkerd-proxy-injector-k8s-tls"
   externalSecret: true
   injectCaFrom: linkerd/linkerd-proxy-injector
 
