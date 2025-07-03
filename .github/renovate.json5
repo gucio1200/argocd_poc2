@@ -28,7 +28,7 @@
   "packageRules": [
     {
       "matchFileNames": ["clusters/**"],
-      "additionalBranchPrefix": "{{ replace '^clusters/([^-]+-[^-]+-[^-]+)/([^/]+/[^/]+)$' '$1/$2' packageFileDir }}/",
+      "additionalBranchPrefix": "{{ replace '^clusters/([^-]+-[^-]+-[^-]+)' '$1' packageFileDir }}/",
       "commitMessageSuffix": " - {{ replace '^clusters/([^-]+-[^-]+-[^-]+)/([^/]+/[^/]+)$' '$2' packageFileDir }}",
       "addLabels": [
         "stage: {{ lookup (split (replace '^clusters/([^-]+)-([^-]+)-([^-]+)/.*' '$1' packageFileDir) '-') 0 }}",
