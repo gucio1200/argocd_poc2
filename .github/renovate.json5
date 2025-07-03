@@ -18,6 +18,12 @@
       "additionalBranchPrefix": "{{ replace '.*overlays/([^/]+/[^/]+/[^/]+)$' '$1' packageFileDir }}/",
       "commitMessageSuffix": " - {{ replace '.*overlays/([^/]+/[^/]+/[^/]+)$' '$1' packageFileDir }}",
       "addLabels": ["stage: {{ lookup (split (replace '.*overlays/([^/]+/[^/]+/[^/]+)$' '$1' packageFileDir) '/') 0 }}","region: {{ lookup (split (replace '.*overlays/([^/]+/[^/]+/[^/]+)$' '$1' packageFileDir) '/') 1 }}","cluster: {{ lookup (split (replace '.*overlays/([^/]+/[^/]+/[^/]+)$' '$1' packageFileDir) '/') 2 }}"]
+    },
+    {
+      "matchFileNames": ["base/**"],
+      "additionalBranchPrefix": "{{ replace 'base/([^/]+/[^/]+)$' '$1' packageFileDir }}/",
+      "commitMessageSuffix": " - {{ replace 'base/([^/]+/[^/]+)$' '$1' packageFileDir }}",
+      "addLabels": ["stage: base"]
     }
   ]
 }
