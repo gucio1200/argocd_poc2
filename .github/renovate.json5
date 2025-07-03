@@ -28,7 +28,7 @@
       "matchFileNames": ["base/**"],
       "additionalBranchPrefix": "{{ replace '^base/(.+)' '$1' packageFileDir }}/",
       "commitMessageSuffix": " - {{ replace '^base/(.+)' '$1' packageFileDir }}",
-      "addLabels": ["stage: base", "WARNING"]
+      "addLabels": ["BASE", "WARNING"]
     },
 //Terraform
     {
