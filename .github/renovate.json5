@@ -17,13 +17,13 @@
   "separateMultipleMinor": true,
   "separateMultipleMajor": true,
   "flux": {
-    "fileMatch": ["(k8s|lb)/.+\\.ya?ml$"]
+    "fileMatch": [".+\\.ya?ml$"]
   },
   "helm-values": {
-    "fileMatch": ["(k8s|lb)/.+\\.ya?ml$"]
+    "fileMatch": [".+\\.ya?ml$"]
   },
   "kubernetes": {
-    "fileMatch": ["(k8s|lb)/.+\\.ya?ml$"]
+    "fileMatch": [".+\\.ya?ml$"]
   },
   "packageRules": [
     {
