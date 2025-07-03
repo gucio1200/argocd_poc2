@@ -13,6 +13,7 @@
     "fileMatch": [".+\\.ya?ml$"]
   },
   "packageRules": [
+//ArgoCD
     {
       "matchFileNames": ["clusters/**"],
       "additionalBranchPrefix": "{{ replace '^clusters/([^/]+)' '$1' packageFileDir }}/",
@@ -28,7 +29,18 @@
       "additionalBranchPrefix": "{{ replace '^base/(.+)' '$1' packageFileDir }}/",
       "commitMessageSuffix": " - {{ replace '^base/(.+)' '$1' packageFileDir }}",
       "addLabels": ["stage: base"]
-    }
+    },
+//Terraform
+    {
+      "matchFileNames": ["dev/**","int/**","prod/**","pprod/**"],
+      "additionalBranchPrefix": "{{ replace '^([^/]+)' '$1' packageFileDir }}/",
+//      "commitMessageSuffix": " - {{ replace '^clusters/[^/]+/(.+)$' '$1' packageFileDir }}",
+      "addLabels": [
+        "stage: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '-') 0 }}",
+        "region: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '-') 1 }}",
+        "cluster: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '-') 2 }}"
+       ]
+    },
   ]
 }
 
