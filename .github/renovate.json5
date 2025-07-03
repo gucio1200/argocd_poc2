@@ -36,9 +36,9 @@
       "additionalBranchPrefix": "{{ replace '^([^/]+)' '$1' packageFileDir }}/",
 //      "commitMessageSuffix": " - {{ replace '^clusters/[^/]+/(.+)$' '$1' packageFileDir }}",
       "addLabels": [
-        "stage: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '-') 0 }}",
-        "region: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '-') 1 }}",
-        "cluster: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '-') 2 }}"
+        "stage: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 0 }}",
+        "region: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 1 }}",
+        "cluster: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 2 }}"
        ]
     },
   ]
