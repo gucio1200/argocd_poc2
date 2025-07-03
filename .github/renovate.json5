@@ -30,7 +30,7 @@
       "matchFileNames": ["clusters/**"],
       "additionalBranchPrefix": "{{ replace '^clusters/([^-]+-[^-]+-[^-]+)/([^/]+/[^/]+)$' '$2' packageFileDir }}/",
       "commitMessageSuffix": " - {{ replace '^clusters/([^-]+-[^-]+-[^-]+)/([^/]+/[^/]+)$' '$2' packageFileDir }}",
-      "addLabels": ["stage: {{ lookup (split (replace '^clusters/([^-]+-[^-]+-[^-]+)' '$1' packageFileDir) '-') 0 }}","region: {{ lookup (split (replace '^clusters/([^-]+-[^-]+-[^-]+)' '$1' packageFileDir) '-') 1 }}","cluster: {{ lookup (split (replace '^clusters/([^-]+-[^-]+-[^-]+)' '$1' packageFileDir) '-') 2 }}"]
+      "addLabels": ["stage: {{ lookup (split (replace '^clusters/([^-]+-[^-]+-[^-]+)/' '$1' packageFileDir) '-') 0 }}","region: {{ lookup (split (replace '^clusters/([^-]+-[^-]+-[^-]+)' '$1' packageFileDir) '-') 1 }}","cluster: {{ lookup (split (replace '^clusters/([^-]+-[^-]+-[^-]+)' '$1' packageFileDir) '-') 2 }}"]
     },
     {
       "matchFileNames": ["base/**"],
