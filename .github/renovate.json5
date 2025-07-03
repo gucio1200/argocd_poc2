@@ -15,8 +15,8 @@
   "packageRules": [
     {
       "matchFileNames": ["clusters/**"],
-      "additionalBranchPrefix": "{{ replace '^clusters/([^-]+-[^-]+-[^-]+)' '$1' packageFileDir }}/",
-      "commitMessageSuffix": " - {{ replace '^clusters/([^-]+-[^-]+-[^-]+)/([^/]+/[^/]+)$' '$2' packageFileDir }}",
+      "additionalBranchPrefix": "{{ replace '^clusters/([^/]+)' '$1' packageFileDir }}/",
+      "commitMessageSuffix": " - {{ replace '^clusters/[^/]+/(.+)$' '$2' packageFileDir }}",
       "addLabels": [
         "stage: {{ lookup (split (replace '^clusters/([^/]+)/.*' '$1' packageFileDir) '-') 0 }}",
         "region: {{ lookup (split (replace '^clusters/([^/]+)/.*' '$1' packageFileDir) '-') 1 }}",
@@ -25,8 +25,8 @@
     },
     {
       "matchFileNames": ["base/**"],
-      "additionalBranchPrefix": "{{ replace '^base/([^/]+/[^/]+)' '$1' packageFileDir }}/",
-      "commitMessageSuffix": " - {{ replace '^base/([^/]+/[^/]+)' '$1' packageFileDir }}",
+      "additionalBranchPrefix": "{{ replace '^base/(.+)' '$1' packageFileDir }}/",
+      "commitMessageSuffix": " - {{ replace '^base/(.+)' '$1' packageFileDir }}",
       "addLabels": ["stage: base"]
     }
   ]
