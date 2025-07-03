@@ -38,7 +38,8 @@
       "addLabels": [
         "stage: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 0 }}",
         "region: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 1 }}",
-        "cluster: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 2 }}"
+        "cluster: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 2 }}",
+        "phase: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 3 }}"
        ]
     },
   ]
