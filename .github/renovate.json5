@@ -1,21 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    ":dependencyDashboard",
-    ":disableRateLimiting",
-    "docker:enableMajor",
-    ":enablePreCommit",
-    "github>gucio1200/renovate-config:custom-managers.json5"
+    "github>gucio1200/renovate-config"
   ],
-  "timezone": "Europe/Warsaw",
-  "dependencyDashboardTitle": "Renovate Dashboard",
-  "suppressNotifications": ["prIgnoreNotification"],
-  "commitBodyTable": true,
-  "rebaseWhen": "auto",
-  "platformCommit": true,
-  "separateMultipleMinor": true,
-  "separateMultipleMajor": true,
   "flux": {
     "fileMatch": [".+\\.ya?ml$"]
   },
