@@ -35,10 +35,10 @@
       "matchFileNames": ["dev/**","int/**","prod/**","pprod/**"],
       "additionalBranchPrefix": "{{ replace '^([^/]+)' '$1' packageFileDir }}/",
       "addLabels": [
-        "stage: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 0 }}",
-        "region: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 1 }}",
-        "cluster: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 2 }}",
-        "phase: {{ lookup (split (replace '^([^/]+)/.*' '$1' packageFileDir) '/') 3 }}"
+        "stage: {{ lookup (split packageFileDir '/') 0 }}",
+        "region: {{ lookup (split packageFileDir '/') 1 }}",
+        "cluster: {{ lookup (split packageFileDir '/') 2 }}",
+        "phase: {{ lookup (split packageFileDir '/') 3 }}"
        ]
     },
   ]
