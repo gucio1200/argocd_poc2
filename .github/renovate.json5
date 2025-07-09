@@ -34,6 +34,7 @@
     {
       "matchFileNames": ["dev/**","int/**","prod/**","pprod/**"],
       "additionalBranchPrefix": "{{ replace '^([^/]+)' '$1' packageFileDir }}/",
+      "commitMessageSuffix": " - {{ replace '^([^/]+)' '$1' packageFileDir }}",
       "addLabels": [
         "stage: {{ lookup (split packageFileDir '/') 0 }}",
         "region: {{ lookup (split packageFileDir '/') 1 }}",
