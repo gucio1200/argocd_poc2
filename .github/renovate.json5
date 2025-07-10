@@ -4,13 +4,13 @@
     "github>gucio1200/renovate-config"
   ],
   flux: {
-    managerFilePatterns: [".+\\.ya?ml$/"],
+    managerFilePatterns: ["\\.ya?ml"],
   },
   "helm-values": {
-    managerFilePatterns: [".+\\.ya?ml$/"],
+    managerFilePatterns: ["\\.ya?ml"],
   },
   kubernetes: {
-    managerFilePatterns: [".+\\.ya?ml$/"],
+    managerFilePatterns: ["\\.ya?ml"],
   },
   "packageRules": [
 //ArgoCD
