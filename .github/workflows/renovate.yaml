@@ -22,7 +22,7 @@ on:
 jobs:
   renovate:
     name: Renovate
-    uses: gucio1200/gh-workflows/.github/workflows/run-renovate.yaml@main
+    uses: gucio1200/gh-workflows/.github/workflows/run-renovate.yaml@test
     with:
       configurationFile: ".github/renovate.json5"
       dryRun: ${{ inputs.dryRun || 'false' }}
