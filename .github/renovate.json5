@@ -1,16 +1,16 @@
 {
-  $schema: "https://docs.renovatebot.com/renovate-schema.json",
-  extends: [
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
     "github>gucio1200/renovate-config"
   ],
-  flux: {
-    managerFilePatterns: [".+\\.ya?ml$/"],
+  "flux": {
+    "fileMatch": ["/.+\\.ya?ml$/"]
   },
   "helm-values": {
-    managerFilePatterns: [".+\\.ya?ml$/"],
+    "fileMatch": ["/.+\\.ya?ml$/"]
   },
-  kubernetes: {
-    managerFilePatterns: [".+\\.ya?ml$/"],
+  "kubernetes": {
+    "fileMatch": ["/.+\\.ya?ml$/"]
   },
   "packageRules": [
 //ArgoCD
@@ -44,4 +44,3 @@
     },
   ]
 }
-
