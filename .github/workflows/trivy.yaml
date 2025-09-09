@@ -30,30 +30,54 @@ jobs:
         with:
           version: v0.66.0
 
-      - name: Scan Docker images with Trivy
+      - name: Find kustomization folders
+        id: find_folders
+        run: |
+          folders=$(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.all_changed_files }}")
+          echo "kustomization_folders=$folders" >> "$GITHUB_OUTPUT"
+
+      - name: Process kustomization folders
+        id: extract_images
+        run: |
+          declare -A images_set
+          for folder in ${{ steps.find_folders.outputs.kustomization_folders }}; do
+            echo "Processing folder: $folder"
+            mapfile -t imgs < <(kustomize build --enable-helm --load-restrictor LoadRestrictionsNone "$folder" | grep -E 'image: ' | awk '{print $2}')
+            for img in "${imgs[@]}"; do
+              images_set["$img"]=1
+            done
+          done
+
+          # Prepare space-separated list of unique images
+          printf -v images_str "%s " "${!images_set[@]}"
+          images_str="${images_str%" "}"
+
+          echo "docker_images=$images_str" >> "$GITHUB_OUTPUT"
+
+      - name: Scan Docker images
         id: trivy_scan
         run: |
           result=""
           exit_code=0
 
-          docker_images=$(for folder in $(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.folders }}"); do
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone "$folder" | grep -E 'image: ' | awk '{print $2}'
-          done | sort -u)
-
-          for img in $docker_images; do
+          for img in ${{ steps.extract_images.outputs.docker_images }}; do
             echo "🔍 Scanning image: $img"
 
+            # Run Trivy JSON scan
             scan_output=$(trivy image --quiet --severity HIGH,CRITICAL --format json "$img" 2>/dev/null) || true
 
+            # Count HIGH and CRITICAL vulnerabilities
             high=$(echo "$scan_output" | jq '[.Results[].Vulnerabilities[]? | select(.Severity=="HIGH")] | length')
             critical=$(echo "$scan_output" | jq '[.Results[].Vulnerabilities[]? | select(.Severity=="CRITICAL")] | length')
-            cves=$(echo "$scan_output" | jq -r '[.Results[].Vulnerabilities[]? | select(.Severity=="HIGH" or .Severity=="CRITICAL") | .VulnerabilityID] | unique | sort | join(", ")')
+
+            # Extract CVE IDs for HIGH/CRITICAL vulnerabilities
+            cves=$(echo "$scan_output" | jq -r '[.Results[].Vulnerabilities[]? | select(.Severity=="HIGH" or .Severity=="CRITICAL") | .VulnerabilityID] | unique | join(", ")')
 
             if [[ $high -eq 0 && $critical -eq 0 ]]; then
-              result+="✅ $img → No HIGH/CRITICAL vulnerabilities"$'\n\n'
+              result+="✅ $img → No HIGH/CRITICAL vulnerabilities"$$'\n\n'
             else
               result+="❌ $img → $high HIGH / $critical CRITICAL"$'\n'
-              result+="<details><summary>Show CVE IDs</summary>$'\n'$cves$'\n'</details>"$'\n\n'
+              result+="CVE IDs: $cves"$'\n\n'
               exit_code=1
             fi
           done
