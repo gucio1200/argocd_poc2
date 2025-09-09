@@ -61,10 +61,8 @@ jobs:
           TMP_DIFF_FILE=diff-raw.txt
 
           # Capture git diff
-          set +e
-          git diff --no-index --color=never $TMPDIR/base $TMPDIR/pr > $TMP_DIFF_FILE 2>&1
-          exit_code=$?
-          set -e
+          git diff --no-index --color=never $TMPDIR/base $TMPDIR/pr > $TMP_DIFF_FILE 2>&1 || true
+          exit_code=${PIPESTATUS[0]}
 
           # Fallback message if no changes
           if [[ $exit_code -eq 0 ]]; then
