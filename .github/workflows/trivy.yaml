@@ -1,4 +1,4 @@
-name: Find and Process Kustomizations
+name: Find and Process Images
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  kustomization:
+  trivy:
     runs-on: ubuntu-latest
 
     steps:
