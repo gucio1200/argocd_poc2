@@ -40,6 +40,7 @@ jobs:
           for folder in ${{ steps.find_folders.outputs.kustomization_folders }}; do
             echo "Processing folder: $folder"
             manifests=$(kustomize build --enable-helm --load-restrictor LoadRestrictionsNone "$folder")
+            echo $manifests
             for img in $(echo "$manifests" | grep -E 'image: ' | awk '{print $2}'); do
               images_set["$img"]=1
             done
