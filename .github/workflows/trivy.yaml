@@ -16,8 +16,6 @@ jobs:
         uses: tj-actions/changed-files@v34
         with:
           dir_names: "true"
-          files: |
-            '**/*'
 
       - name: Find kustomization folders
         id: find_folders
