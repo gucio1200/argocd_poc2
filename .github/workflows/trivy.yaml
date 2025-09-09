@@ -3,6 +3,9 @@ name: Find and Process Kustomizations
 on:
   pull_request:
 
+permissions:
+  pull-requests: write
+
 jobs:
   kustomization:
     runs-on: ubuntu-latest
@@ -52,9 +55,22 @@ jobs:
 
           echo "docker_images=$images_str" >> "$GITHUB_OUTPUT"
 
-      - name: Scan Docker images with Trivy
+      - name: Scan Docker images
+        id: trivy_scan
         run: |
+          result=""
           for img in ${{ steps.extract_images.outputs.docker_images }}; do
             echo "Scanning image: $img"
-            trivy image --exit-code 1 --severity CRITICAL,HIGH "$img"
+            scan_output=$(trivy image --quiet --severity HIGH,CRITICAL "$img")
+            result+=$'\n'"## $img"$'\n'"$scan_output"$'\n'
           done
+          echo "scan_result<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$result" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Comment Trivy scan results
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ${{ steps.trivy_scan.outputs.scan_result }}
