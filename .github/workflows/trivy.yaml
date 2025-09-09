@@ -58,21 +58,14 @@ jobs:
       - name: Scan Docker images
         id: trivy_scan
         run: |
-          set -o errexit
-          set -o pipefail
-
           result=""
           exit_code=0
 
           for img in ${{ steps.extract_images.outputs.docker_images }}; do
             echo "🔍 Scanning image: $img"
-            scan_output=$(trivy image --quiet --severity HIGH,CRITICAL --format json "$img" 2>/dev/null)
-            code=$?
-            if [[ $code -ne 0 ]]; then
-              exit_code=1
-            fi
 
-            # Count HIGH and CRITICAL vulnerabilities
+            scan_output=$(trivy image --quiet --severity HIGH,CRITICAL --format json "$img" 2>/dev/null) || true
+
             high=$(echo "$scan_output" | jq '[.Results[].Vulnerabilities[]? | select(.Severity=="HIGH")] | length')
             critical=$(echo "$scan_output" | jq '[.Results[].Vulnerabilities[]? | select(.Severity=="CRITICAL")] | length')
 
@@ -80,6 +73,7 @@ jobs:
               result+="✅ $img → No HIGH/CRITICAL vulnerabilities"$'\n'
             else
               result+="❌ $img → $high HIGH / $critical CRITICAL"$'\n'
+              exit_code=1
             fi
           done
 
@@ -87,7 +81,6 @@ jobs:
           echo "$result" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
           echo "trivy_exit_code=$exit_code" >> "$GITHUB_OUTPUT"
-          exit $exit_code
 
       - name: Comment PR with Trivy results
         if: ${{ github.event_name == 'pull_request' }}
@@ -97,3 +90,9 @@ jobs:
           message: |
             ## 🛡️ Trivy Scan Results
             ${{ steps.trivy_scan.outputs.scan_result }}
+
+      - name: Fail if vulnerabilities found
+        if: ${{ steps.trivy_scan.outputs.trivy_exit_code != '0' }}
+        run: |
+          echo "❌ HIGH or CRITICAL vulnerabilities detected!"
+          exit 1
