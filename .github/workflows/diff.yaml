@@ -56,7 +56,7 @@ jobs:
 
           COMMENT_FILE=diff-comment.md
           # Generate full git-style diff with proper headers
-          git -c color.ui=always diff --no-index --color=never manifests/base manifests/pr > $COMMENT_FILE
+          git -c color.ui=always diff --no-index --color=never manifests/base manifests/pr > $COMMENT_FILE || true
 
           # fallback if empty
           if [[ ! -s "$COMMENT_FILE" ]]; then
