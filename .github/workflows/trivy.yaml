@@ -55,6 +55,7 @@ jobs:
 
           echo "docker_images=$images_str" >> "$GITHUB_OUTPUT"
 
+
       - name: Scan Docker images
         id: trivy_scan
         run: |
