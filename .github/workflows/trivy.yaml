@@ -101,5 +101,5 @@ jobs:
       - name: Fail if HIGH/CRITICAL vulnerabilities found
         if: ${{ steps.trivy_scan.outputs.trivy_exit_code != '0' }}
         run: |
-          echo "HIGH or CRITICAL vulnerabilities detected!"
+          echo "❌ HIGH or CRITICAL vulnerabilities detected!"
           exit 1
