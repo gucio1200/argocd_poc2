@@ -58,16 +58,32 @@ jobs:
       - name: Scan Docker images
         id: trivy_scan
         run: |
-          result=""
+          set -e
+          rm -f ./*.sarif
+          exit_code=0
           for img in ${{ steps.extract_images.outputs.docker_images }}; do
             echo "Scanning image: $img"
             safe_name=$(echo "$img" | sed 's/[:\/]/_/g')
-            trivy image --quiet --severity HIGH,CRITICAL --format sarif -o "$safe_name.sarif" "$img"
+            # Run Trivy for each image
+            trivy image \
+              --quiet \
+              --severity HIGH,CRITICAL \
+              --exit-code 1 \
+              --format sarif \
+              -o "$safe_name.sarif" \
+              "$img" || exit_code=$?
           done
 
           jq -s '{version:"2.1.0", runs: map(.runs) | add}' ./*.sarif > trivy.sarif
+          echo "trivy_exit_code=$exit_code" >> "$GITHUB_OUTPUT"
 
       - name: Upload SARIF report to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy.sarif
+
+      - name: Fail if HIGH/CRITICAL vulnerabilities found
+        if: ${{ steps.trivy_scan.outputs.trivy_exit_code != '0' }}
+        run: |
+          echo "HIGH or CRITICAL vulnerabilities detected!"
+          exit 1
