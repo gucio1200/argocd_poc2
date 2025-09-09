@@ -46,7 +46,7 @@ jobs:
       - name: Build manifests
         run: |
           mkdir -p manifests/pr manifests/base
-          for path in $kustomizations; do
+          for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             echo "Building manifests for $path"
             echo "PR"
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path
