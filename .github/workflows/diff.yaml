@@ -54,27 +54,28 @@ jobs:
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > manifests/pr/$BASENAME.yaml
           done
 
+          # Capture git diff and exit code (0 = no changes, 1 = changes)
           set +e
           diff=$(git diff --no-index --color=never manifests/base manifests/pr 2>&1)
           exit_code=$?
+          set -e
 
+          # Prepare output
           if [[ $exit_code -eq 0 ]]; then
             output="No differences found in Kustomize output between base and PR build."
           else
-            # Wrap in diff block for proper formatting
             output="$diff"
           fi
 
-          # Escape newlines for GitHub Actions output
-          escaped_output="${output//$'\n'/'%0A'}"
-
-          # Truncate if too long (GitHub has ~65k char limit)
-          if [ ${#escaped_output} -gt 65000 ]; then
-            escaped_output="Diff output too large to display in a comment."
+          # Truncate if too large (~65k characters)
+          if [ ${#output} -gt 65000 ]; then
+            output="Diff output too large to display in a comment."
           fi
 
-          echo "comment=$escaped_output" >> $GITHUB_OUTPUT
+          # Set step output
+          echo "comment=$output" >> $GITHUB_OUTPUT
 
+      # Step 7: Post collapsible PR comment
       - id: comment
         uses: actions/github-script@v7.1.0
         env:
@@ -82,7 +83,7 @@ jobs:
         with:
           script: |
             const rawOutput = process.env.OUTPUT;
-            const noDiffMessage = "No differences found between";
+            const noDiffMessage = "No differences found";
 
             const formattedOutput = rawOutput.includes(noDiffMessage)
               ? `### ${rawOutput}`
