@@ -54,19 +54,15 @@ jobs:
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > manifests/pr/$BASENAME.yaml
           done
 
-          TMP_DIFF_FILE=diff-raw.txt
-
-          # Capture full git-style diff and ensure no failure on exit code 1
           set +e
-          git diff --no-index --color=never manifests/base manifests/pr > $TMP_DIFF_FILE 2>&1
+          diff=$(git diff --no-index --color=never manifests/base manifests/pr 2>&1)
           exit_code=$?
-          set -e
 
           if [[ $exit_code -eq 0 ]]; then
             output="No differences found in Kustomize output between base and PR build."
           else
             # Wrap in diff block for proper formatting
-            output="```diff$(printf '\n')$(cat $TMP_DIFF_FILE)$(printf '\n')```"
+            output="$diff"
           fi
 
           # Escape newlines for GitHub Actions output
@@ -79,8 +75,22 @@ jobs:
 
           echo "comment=$escaped_output" >> $GITHUB_OUTPUT
 
-      - name: Post Sticky PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
+      - id: comment
+        uses: actions/github-script@v7.0.1
+        env:
+          OUTPUT: ${{ steps.generate-diff.outputs.comment }}
         with:
-          message: ${{ steps.generate-diff.outputs.comment }}
-          header: "### :gear: Kustomize Diff"
+          script: |
+            const rawOutput = process.env.OUTPUT;
+            const noDiffMessage = "No differences found between";
+
+            const formattedOutput = rawOutput.includes(noDiffMessage)
+              ? `### ${rawOutput}`
+              : `### Kustomize Changes\n<details><summary>Show Diff</summary>\n\n\`\`\`diff\n${rawOutput}\n\`\`\`\n</details>`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: formattedOutput
+            })
