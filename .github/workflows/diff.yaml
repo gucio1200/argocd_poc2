@@ -84,5 +84,5 @@ jobs:
       - name: Post Sticky PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          body: ${{ steps.generate-diff.outputs.comment }}
+          message: ${{ steps.generate-diff.outputs.comment }}
           header: "### :gear: Kustomize Diff"
