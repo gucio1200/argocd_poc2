@@ -32,17 +32,18 @@ jobs:
         env:
           VERSION: "v0.66.0"
 
-      - name: Find kustomization folders
-        id: find_folders
+      - name: Find affected kustomizations
+        id: kustomizations
         run: |
-          folders=$(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.all_changed_files }}")
-          echo "kustomization_folders=$folders" >> "$GITHUB_OUTPUT"
+          kustomizations=$(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.all_changed_files }}")
+          echo "kustomizations=$kustomizations" >> "$GITHUB_OUTPUT"
+          echo "Affected kustomizations: $kustomizations"
 
       - name: Process kustomization folders
         id: extract_images
         run: |
           declare -A images_set
-          for folder in ${{ steps.find_folders.outputs.kustomization_folders }}; do
+          for folder in ${{ steps.kustomizations.outputs.kustomizations }}; do
             echo "Processing folder: $folder"
             mapfile -t imgs < <(kustomize build --enable-helm --load-restrictor LoadRestrictionsNone "$folder" | grep -E 'image: ' | awk '{print $2}')
             for img in "${imgs[@]}"; do

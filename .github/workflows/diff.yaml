@@ -27,9 +27,9 @@ jobs:
       - name: Find affected kustomizations
         id: kustomizations
         run: |
-          KUSTOMIZATIONS=$(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.all_changed_files }}")
-          echo "kustomizations=$KUSTOMIZATIONS" >> "$GITHUB_OUTPUT"
-          echo "Affected kustomizations: $KUSTOMIZATIONS"
+          kustomizations=$(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.all_changed_files }}")
+          echo "kustomizations=$kustomizations" >> "$GITHUB_OUTPUT"
+          echo "Affected kustomizations: $kustomizations"
 
       - name: Checkout base branch
         uses: actions/checkout@v4
@@ -50,6 +50,7 @@ jobs:
         run: |
           TMPDIR=$(mktemp -d)
           mkdir -p $TMPDIR/base $TMPDIR/pr
+
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             BASENAME=$(basename "$path")
             echo "Building manifests for $path"
