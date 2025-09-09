@@ -43,16 +43,6 @@ jobs:
         with:
           version: 5.7.1
 
-      - name: Build manifests
-        run: |
-          mkdir -p manifests/pr manifests/base
-          for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
-            echo "Building manifests for $path"
-            FILE=$(basename $path)
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > manifests/pr/${FILE}.yaml
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > manifests/base/${FILE}.yaml
-          done
-
       - name: Generate diffs
         id: generate-diff
         run: |
@@ -61,8 +51,9 @@ jobs:
 
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             BASENAME=$(basename "$path")
-            kustomize build base-branch/$path > $TMPDIR/base/$BASENAME.yaml
-            kustomize build current-branch/$path > $TMPDIR/pr/$BASENAME.yaml
+            echo "Building manifests for $path"
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > $TMPDIR/base/$BASENAME.yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > $TMPDIR/pr/$BASENAME.yaml
           done
 
           COMMENT_FILE=diff-comment.md
