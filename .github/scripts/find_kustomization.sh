@@ -16,6 +16,7 @@ process_folder() {
 
     # --- Folders containing 'base' anywhere ---
     if [[ "$folder" == *base* ]] && [[ $folder =~ .*/([^/]+)/([^/]+)$ ]]; then
+        # Take last 2 folders
         local last_two="${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
         # Search ./clusters recursively for files containing last_two, omit .git
         while IFS= read -r f; do
