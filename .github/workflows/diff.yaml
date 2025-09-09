@@ -53,14 +53,13 @@ jobs:
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > manifests/base/${FILE}.yaml
           done
 
-
       - name: Generate diffs
         id: generate-diff
         run: |
           COMMENT=""
           echo -e "\033[1;36m=== Kustomize Manifest Diff ===\033[0m"
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
-            FILE=$(basename $path)
+            FILE=$(basename "$path")
             DIFF_COLOR=$(git diff --no-index --color manifests/base/${FILE}.yaml manifests/pr/${FILE}.yaml || true)
             DIFF_PLAIN=$(git diff --no-index --color=never manifests/base/${FILE}.yaml manifests/pr/${FILE}.yaml || true)
             if [[ -n "$DIFF_PLAIN" ]]; then
@@ -71,13 +70,19 @@ jobs:
               COMMENT+="### Diff for \`${path}\`\n\`\`\`diff\n$DIFF_PLAIN\n\`\`\`\n"
             fi
           done
+
           if [[ -z "$COMMENT" ]]; then
             COMMENT="No Kustomize changes detected."
           fi
-          echo "$COMMENT" > diff-comment.md
+
+          # Escape newlines for output
+          ESCAPED_COMMENT="${COMMENT//$'\n'/'%0A'}"
+
+          # Set output
+          echo "comment=$ESCAPED_COMMENT" >> $GITHUB_OUTPUT
 
       - name: Post Sticky PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          path: diff-comment.md
+          body: ${{ steps.generate-diff.outputs.comment }}
           header: "### :gear: Kustomize Diff"
