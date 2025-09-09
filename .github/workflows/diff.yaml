@@ -46,19 +46,17 @@ jobs:
       - name: Generate diffs
         id: generate-diff
         run: |
-          TMPDIR=$(mktemp -d)
-          mkdir -p $TMPDIR/base $TMPDIR/pr
-
+          mkdir -p manifests/base manifests/pr
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             BASENAME=$(basename "$path")
             echo "Building manifests for $path"
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > $TMPDIR/base/$BASENAME.yaml
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > $TMPDIR/pr/$BASENAME.yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > manifests/base/$BASENAME.yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > manifests/pr/$BASENAME.yaml
           done
 
           COMMENT_FILE=diff-comment.md
           # Generate full git-style diff with proper headers
-          git -c color.ui=always diff --no-index --color=never $TMPDIR/base $TMPDIR/pr > $COMMENT_FILE
+          git -c color.ui=always diff --no-index --color=never manifests/base manifests/pr > $COMMENT_FILE
 
           # fallback if empty
           if [[ ! -s "$COMMENT_FILE" ]]; then
