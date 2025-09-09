@@ -16,7 +16,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-          path: current-branch
           fetch-depth: 0
 
       - name: Checkout base branch
@@ -46,9 +45,9 @@ jobs:
 
       - name: Build manifests
         run: |
-          mkdir -p ../manifests/pr ../manifests/base
+          mkdir -p manifests/pr manifests/base
           for path in $kustomizations; do
             echo "Building manifests for $path"
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone current-branch/$path > ../manifests/pr/$(basename $path).yaml
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > ../manifests/base/$(basename $path).yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > manifests/pr/$(basename $path).yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > manifests/base/$(basename $path).yaml
           done
