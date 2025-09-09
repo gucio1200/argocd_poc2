@@ -22,6 +22,11 @@ jobs:
         with:
           version: 5.7.1
 
+      - name: Install Trivy
+        uses: aquasecurity/setup-trivy@v0.2.3
+        with:
+          version: v0.61.0
+
       - name: Find kustomization folders
         id: find_folders
         run: |
@@ -34,7 +39,5 @@ jobs:
           for folder in ${{ steps.find_folders.outputs.kustomization_folders }}; do
             echo "Processing folder: $folder"
             kustomize build "$folder" --enable-helm --load-restrictor LoadRestrictionsNone -o ./output.yaml
-
-            # - Scan images with Trivy
-            # trivy image --input ./tmp/output.yaml
+            trivy image --exit-code 1 --severity CRITICAL,HIGH --input ./output.yaml
           done
