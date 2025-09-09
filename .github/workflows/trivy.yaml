@@ -33,7 +33,6 @@ jobs:
       - name: Find kustomization folders
         id: find_folders
         run: |
-          # Run the script with modified folders as input
           folders=$(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.all_changed_files }}")
           echo "kustomization_folders=$folders" >> "$GITHUB_OUTPUT"
 
@@ -54,7 +53,6 @@ jobs:
           images_str="${images_str%" "}"
 
           echo "docker_images=$images_str" >> "$GITHUB_OUTPUT"
-
 
       - name: Scan Docker images
         id: trivy_scan
@@ -84,7 +82,6 @@ jobs:
             fi
           done
 
-          # Save outputs for PR comment and final fail
           echo "scan_result<<EOF" >> "$GITHUB_OUTPUT"
           echo "$result" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
