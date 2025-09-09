@@ -65,7 +65,7 @@ jobs:
             trivy image --quiet --severity HIGH,CRITICAL --format sarif -o "$safe_name.sarif" "$img"
           done
 
-          jq -s '{runs: map(.runs) | add}' ./*.sarif > trivy.sarif
+          jq -s '{version:"2.1.0", runs: map(.runs) | add}' ./*.sarif > trivy.sarif
 
       - name: Upload SARIF report to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
