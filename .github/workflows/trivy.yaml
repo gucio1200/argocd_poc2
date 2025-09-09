@@ -17,6 +17,11 @@ jobs:
         with:
           dir_names: "true"
 
+      - name: Setup Kustomize
+        uses: multani/action-setup-kustomize@v1
+        with:
+          version: 5.7.1
+
       - name: Find kustomization folders
         id: find_folders
         run: |
@@ -28,10 +33,7 @@ jobs:
         run: |
           for folder in ${{ steps.find_folders.outputs.kustomization_folders }}; do
             echo "Processing folder: $folder"
-
-            # Example commands:
-            # - Build manifests
-            # kustomize build "$folder" -o ./tmp/output.yaml
+            kustomize build "$folder" --enable-helm --load-restrictor LoadRestrictionsNone -o ./tmp/output.yaml
 
             # - Scan images with Trivy
             # trivy image --input ./tmp/output.yaml
