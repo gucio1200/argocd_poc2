@@ -41,7 +41,7 @@ jobs:
         id: kustomizations
         run: |
           KUSTOMIZATIONS=$(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.all_changed_files }}")
-          echo "kustomizations=$KUSTOMIZATIONS" >> $GITHUB_ENV
+          echo "kustomizations=$KUSTOMIZATIONS" >> "$GITHUB_OUTPUT"
           echo "Affected kustomizations: $KUSTOMIZATIONS"
 
       - name: Build manifests
