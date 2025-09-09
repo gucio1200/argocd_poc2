@@ -42,8 +42,8 @@ jobs:
       - name: Install kustomize
         run: |
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash -s -- "$KUSTOMIZE_VERSION"
-       env:
-         KUSTOMIZE_VERSION: "5.7.1"
+        env:
+          KUSTOMIZE_VERSION: "5.7.1"
 
       - name: Generate diffs
         id: generate-diff
