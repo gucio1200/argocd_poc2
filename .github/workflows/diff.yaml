@@ -56,30 +56,28 @@ jobs:
 
           TMP_DIFF_FILE=diff-raw.txt
 
+          # Capture git diff
           set +e
           git diff --no-index --color=never manifests/base manifests/pr > $TMP_DIFF_FILE 2>&1
           exit_code=$?
           set -e
 
+          # Fallback message if no changes
           if [[ $exit_code -eq 0 ]]; then
             echo "No differences found in Kustomize output between base and PR build." > $TMP_DIFF_FILE
           fi
 
-      - id: comment
-        uses: actions/github-script@v7
+          # Read diff into output variable
+          comment=$(cat $TMP_DIFF_FILE)
+          echo "comment<<EOF" >> $GITHUB_OUTPUT
+          echo "$comment" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Post PR Comment (update existing)
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
-          script: |
-            const fs = require('fs');
-            const rawOutput = fs.readFileSync('diff-raw.txt', 'utf8');
-            const noDiffMessage = "No differences found";
-
-            const formattedOutput = rawOutput.includes(noDiffMessage)
-              ? `### ${rawOutput}`
-              : `### :gear: Kustomize Changes\n<details><summary>Show Diff</summary>\n\n\`\`\`diff\n${rawOutput}\n\`\`\`\n</details>`;
-
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: formattedOutput
-            })
+          header: "### :gear: Kustomize Changes"
+          message: |
+            ```diff
+            ${{ steps.generate-diff.outputs.comment }}
+            ```
