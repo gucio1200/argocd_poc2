@@ -48,19 +48,20 @@ jobs:
       - name: Generate diffs
         id: generate-diff
         run: |
-          mkdir -p manifests/base manifests/pr
+          TMPDIR=$(mktemp -d)
+          mkdir -p $TMPDIR/base $TMPDIR/pr
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             BASENAME=$(basename "$path")
             echo "Building manifests for $path"
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > manifests/base/$BASENAME.yaml
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > manifests/pr/$BASENAME.yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > $TMPDIR/base/$BASENAME.yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > $TMPDIR/pr/$BASENAME.yaml
           done
 
           TMP_DIFF_FILE=diff-raw.txt
 
           # Capture git diff
           set +e
-          git diff --no-index --color=never manifests/base manifests/pr > $TMP_DIFF_FILE 2>&1
+          git diff --no-index --color=never $TMPDIR/base $TMPDIR/pr > $TMP_DIFF_FILE 2>&1
           exit_code=$?
           set -e
 
