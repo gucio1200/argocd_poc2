@@ -36,8 +36,24 @@ jobs:
 
       - name: Process kustomization folders
         run: |
+          declare -A images_set
           for folder in ${{ steps.find_folders.outputs.kustomization_folders }}; do
             echo "Processing folder: $folder"
-            kustomize build "$folder" --enable-helm --load-restrictor LoadRestrictionsNone -o ./output.yaml
-            trivy image --exit-code 1 --severity CRITICAL,HIGH --input ./output.yaml
+            manifests=$(kustomize build "$folder")
+            for img in $(echo "$manifests" | grep -E 'image: ' | awk '{print $2}'); do
+              images_set["$img"]=1
+            done
+          done
+
+          # Prepare space-separated list of unique images
+          printf -v images_str "%s " "${!images_set[@]}"
+          images_str="${images_str%" "}"
+
+          echo "docker_images=$images_str" >> "$GITHUB_OUTPUT"
+
+      - name: Scan Docker images with Trivy
+        run: |
+          for img in ${{ steps.extract_images.outputs.docker_images }}; do
+            echo "Scanning image: $img"
+            trivy image --exit-code 1 --severity CRITICAL,HIGH "$img"
           done
