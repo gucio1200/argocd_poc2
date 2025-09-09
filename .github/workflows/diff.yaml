@@ -56,47 +56,31 @@ jobs:
       - name: Generate diffs
         id: generate-diff
         run: |
-          COMMENT=""
-          echo -e "\033[1;36m=== Kustomize Manifest Diff ===\033[0m"
+          TMPDIR=$(mktemp -d)
+          mkdir -p $TMPDIR/base $TMPDIR/pr
+
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
-            FILE=$(basename "$path")
-            DIFF_COLOR=$(git diff --no-index --color manifests/base/${FILE}.yaml manifests/pr/${FILE}.yaml || true)
-            DIFF_PLAIN=$(git diff --no-index --color=never manifests/base/${FILE}.yaml manifests/pr/${FILE}.yaml || true)
-            if [[ -n "$DIFF_PLAIN" ]]; then
-              # Show colored diff in Actions log
-              echo -e "\n\033[1;33m--- Diff for $path ---\033[0m"
-              echo -e "$DIFF_COLOR"
-              # Prepare PR comment with diff syntax highlighting
-              COMMENT+="### Diff for \`${path}\`\n\`\`\`diff\n$DIFF_PLAIN\n\`\`\`\n"
-            fi
+            BASENAME=$(basename "$path")
+            kustomize build base-branch/$path > $TMPDIR/base/$BASENAME.yaml
+            kustomize build current-branch/$path > $TMPDIR/pr/$BASENAME.yaml
           done
 
-          if [[ -z "$COMMENT" ]]; then
-            COMMENT="No Kustomize changes detected."
+          COMMENT_FILE=diff-comment.md
+          # Generate full git-style diff with proper headers
+          git -c color.ui=always diff --no-index --relative --no-pager \
+            --color=never $TMPDIR/base $TMPDIR/pr > $COMMENT_FILE
+
+          # fallback if empty
+          if [[ ! -s "$COMMENT_FILE" ]]; then
+            echo "No Kustomize changes detected." > $COMMENT_FILE
           fi
 
-          # Escape newlines for output
-          ESCAPED_COMMENT="${COMMENT//$'\n'/'%0A'}"
-
-          # Set output
+          # Escape newlines for GitHub Actions output
+          ESCAPED_COMMENT=$(sed ':a;N;$!ba;s/\n/%0A/g' $COMMENT_FILE)
           echo "comment=$ESCAPED_COMMENT" >> $GITHUB_OUTPUT
 
-      - id: comment
-        uses: actions/github-script@v7.1.0
-        env:
-          OUTPUT: ${{ steps.generate-diff.outputs.comment }}
+      - name: Post Sticky PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
-          script: |
-            const rawOutput = process.env.OUTPUT;
-            const noDiffMessage = "No differences found between";
-
-            const formattedOutput = rawOutput.includes(noDiffMessage)
-              ? `### ${rawOutput}`
-              : `### Kustomize Changes\n<details><summary>Show Diff</summary>\n\n\`\`\`diff\n${rawOutput}\n\`\`\`\n</details>`;
-
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: formattedOutput
-            })
+          message: ${{ steps.generate-diff.outputs.comment }}
+          header: "### :gear: Kustomize Diff"
