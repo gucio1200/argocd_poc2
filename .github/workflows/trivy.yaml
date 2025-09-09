@@ -91,6 +91,7 @@ jobs:
           echo "trivy_exit_code=$exit_code" >> "$GITHUB_OUTPUT"
 
       - name: Comment PR with Trivy results
+        if: ${{ steps.trivy_scan.outputs.scan_result != '' }}
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: "Trivy Scan Results"
