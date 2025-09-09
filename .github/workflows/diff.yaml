@@ -81,8 +81,22 @@ jobs:
           # Set output
           echo "comment=$ESCAPED_COMMENT" >> $GITHUB_OUTPUT
 
-      - name: Post Sticky PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
+      - id: comment
+        uses: actions/github-script@v7.0.1
+        env:
+          OUTPUT: ${{ steps.generate-diff.outputs.comment }}
         with:
-          message: ${{ steps.generate-diff.outputs.comment }}
-          header: "### :gear: Kustomize Diff"
+          script: |
+            const rawOutput = process.env.OUTPUT;
+            const noDiffMessage = "No differences found between";
+
+            const formattedOutput = rawOutput.includes(noDiffMessage)
+              ? `### ${rawOutput}`
+              : `### Kustomize Changes\n<details><summary>Show Diff</summary>\n\n\`\`\`diff\n${rawOutput}\n\`\`\`\n</details>`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: formattedOutput
+            })
