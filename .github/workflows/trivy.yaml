@@ -33,7 +33,7 @@ jobs:
         run: |
           for folder in ${{ steps.find_folders.outputs.kustomization_folders }}; do
             echo "Processing folder: $folder"
-            kustomize build "$folder" --enable-helm --load-restrictor LoadRestrictionsNone -o ./tmp/output.yaml
+            kustomize build "$folder" --enable-helm --load-restrictor LoadRestrictionsNone -o ./output.yaml
 
             # - Scan images with Trivy
             # trivy image --input ./tmp/output.yaml
