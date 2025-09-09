@@ -11,6 +11,6 @@ helmCharts:
     releaseName: podinfo-linkerd
     includeCRDs: true
     namespace: linkerd-test
-    valuesFile: ./../../../../base/values.yaml
+    valuesFile: ./../../../../base/podinfo-linkerd/podinfo-linkerd/values.yaml
     additionalValuesFiles:
       - ./values.yaml
