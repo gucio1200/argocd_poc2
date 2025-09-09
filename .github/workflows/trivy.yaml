@@ -62,7 +62,7 @@ jobs:
           for img in ${{ steps.extract_images.outputs.docker_images }}; do
             echo "Scanning image: $img"
             trivy image --quiet --severity HIGH,CRITICAL "$img"
-            scan_output=$(trivy image --quiet --severity HIGH,CRITICAL "$img")
+            scan_output=$(trivy image --quiet --severity HIGH,CRITICAL --format template --template '{{range .Results}}Found {{len .Vulnerabilities}} vulnerabilities in {{.Target}}{{"\n"}}{{end}}' "$img")
             result+=$'\n'"## $img"$'\n'"$scan_output"$'\n'
           done
           echo "scan_result<<EOF" >> "$GITHUB_OUTPUT"
