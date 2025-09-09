@@ -48,7 +48,6 @@ jobs:
       - name: Generate diffs
         id: generate-diff
         run: |
-          set -euo pipefail
 
           TMPDIR=$(mktemp -d)
           mkdir -p $TMPDIR/base $TMPDIR/pr
@@ -63,8 +62,10 @@ jobs:
           TMP_DIFF_FILE="$TMPDIR/diff-raw.txt"
 
           # Capture git diff without exiting on differences
-          git diff --no-index --color=never "$TMPDIR/base" "$TMPDIR/pr" > "$TMP_DIFF_FILE" 2>&1 || true
+          set +e
+          git diff --no-index --color=never $TMPDIR/base $TMPDIR/pr > $TMP_DIFF_FILE 2>&1
           exit_code=$?
+          set -e
 
           # Fallback message if no changes
           if [[ $exit_code -eq 0 ]]; then
