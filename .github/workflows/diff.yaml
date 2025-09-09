@@ -54,40 +54,28 @@ jobs:
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > manifests/pr/$BASENAME.yaml
           done
 
-          # Capture git diff and exit code (0 = no changes, 1 = changes)
+          TMP_DIFF_FILE=diff-raw.txt
+
           set +e
-          diff=$(git diff --no-index --color=never manifests/base manifests/pr 2>&1)
+          git diff --no-index --color=never manifests/base manifests/pr > $TMP_DIFF_FILE 2>&1
           exit_code=$?
           set -e
 
-          # Prepare output
           if [[ $exit_code -eq 0 ]]; then
-            output="No differences found in Kustomize output between base and PR build."
-          else
-            output="$diff"
+            echo "No differences found in Kustomize output between base and PR build." > $TMP_DIFF_FILE
           fi
 
-          # Truncate if too large (~65k characters)
-          if [ ${#output} -gt 65000 ]; then
-            output="Diff output too large to display in a comment."
-          fi
-
-          # Set step output
-          echo "comment=$output" >> $GITHUB_OUTPUT
-
-      # Step 7: Post collapsible PR comment
       - id: comment
-        uses: actions/github-script@v7.1.0
-        env:
-          OUTPUT: ${{ steps.generate-diff.outputs.comment }}
+        uses: actions/github-script@v7
         with:
           script: |
-            const rawOutput = process.env.OUTPUT;
+            const fs = require('fs');
+            const rawOutput = fs.readFileSync('diff-raw.txt', 'utf8');
             const noDiffMessage = "No differences found";
 
             const formattedOutput = rawOutput.includes(noDiffMessage)
               ? `### ${rawOutput}`
-              : `### Kustomize Changes\n<details><summary>Show Diff</summary>\n\n\`\`\`diff\n${rawOutput}\n\`\`\`\n</details>`;
+              : `### :gear: Kustomize Changes\n<details><summary>Show Diff</summary>\n\n\`\`\`diff\n${rawOutput}\n\`\`\`\n</details>`;
 
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
