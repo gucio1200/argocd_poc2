@@ -18,7 +18,7 @@ process_folder() {
     if [[ "$folder" == *base* ]] && [[ $folder =~ .*/([^/]+)/([^/]+)$ ]]; then
         # Take last 2 folders
         local last_two="${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
-        # Search ./clusters recursively for files containing last_two, omit .git
+        # Search recursively for files containing last_two, omit .git
         while IFS= read -r f; do
             results_set["$(normalize_path "${f%/*}")"]=1
         done < <(grep -rl --exclude-dir=".git" "$last_two" 2>/dev/null)
