@@ -61,10 +61,11 @@ jobs:
           result=""
           for img in ${{ steps.extract_images.outputs.docker_images }}; do
             echo "Scanning image: $img"
-            trivy image --quiet --severity HIGH,CRITICAL --format sarif -o "$img.sarif" "$img"
+            safe_name=$(echo "$img" | sed 's/[:\/]/_/g')
+            trivy image --quiet --severity HIGH,CRITICAL --format sarif -o "$safe_name.sarif" "$img"
           done
 
-          jq -s '{runs: map(.runs) | add}' *.sarif > trivy.sarif
+          jq -s '{runs: map(.runs) | add}' ./*.sarif > trivy.sarif
 
       - name: Upload SARIF report to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
