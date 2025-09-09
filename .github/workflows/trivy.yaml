@@ -64,19 +64,26 @@ jobs:
           for img in ${{ steps.extract_images.outputs.docker_images }}; do
             echo "🔍 Scanning image: $img"
 
+            # Run Trivy JSON scan
             scan_output=$(trivy image --quiet --severity HIGH,CRITICAL --format json "$img" 2>/dev/null) || true
 
+            # Count HIGH and CRITICAL vulnerabilities
             high=$(echo "$scan_output" | jq '[.Results[].Vulnerabilities[]? | select(.Severity=="HIGH")] | length')
             critical=$(echo "$scan_output" | jq '[.Results[].Vulnerabilities[]? | select(.Severity=="CRITICAL")] | length')
+
+            # Extract CVE IDs for HIGH/CRITICAL vulnerabilities
+            cves=$(echo "$scan_output" | jq -r '[.Results[].Vulnerabilities[]? | select(.Severity=="HIGH" or .Severity=="CRITICAL") | .VulnerabilityID] | unique | join(", ")')
 
             if [[ $high -eq 0 && $critical -eq 0 ]]; then
               result+="✅ $img → No HIGH/CRITICAL vulnerabilities"$'\n'
             else
               result+="❌ $img → $high HIGH / $critical CRITICAL"$'\n'
+              result+="CVE IDs: $cves"$'\n'
               exit_code=1
             fi
           done
 
+          # Save outputs for PR comment and final fail
           echo "scan_result<<EOF" >> "$GITHUB_OUTPUT"
           echo "$result" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
