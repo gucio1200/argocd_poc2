@@ -1,4 +1,4 @@
-name: Find and Process Images
+name: Trivy Image
 
 on:
   pull_request:
