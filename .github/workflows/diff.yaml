@@ -18,23 +18,11 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
-      - name: Checkout base branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.ref }}
-          path: base-branch
-          fetch-depth: 0
-
       - name: Get list of changed directories
         id: changed
         uses: tj-actions/changed-files@v46
         with:
           dir_names: "true"
-
-      - name: Setup Kustomize
-        uses: multani/action-setup-kustomize@v1
-        with:
-          version: 5.7.1
 
       - name: Find affected kustomizations
         id: kustomizations
@@ -42,6 +30,18 @@ jobs:
           KUSTOMIZATIONS=$(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.all_changed_files }}")
           echo "kustomizations=$KUSTOMIZATIONS" >> "$GITHUB_OUTPUT"
           echo "Affected kustomizations: $KUSTOMIZATIONS"
+
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          path: base-branch
+          fetch-depth: 0
+
+      - name: Setup Kustomize
+        uses: multani/action-setup-kustomize@v1
+        with:
+          version: 5.7.1
 
       - name: Build manifests
         run: |
