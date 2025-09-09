@@ -76,10 +76,10 @@ jobs:
             cves=$(echo "$scan_output" | jq -r '[.Results[].Vulnerabilities[]? | select(.Severity=="HIGH" or .Severity=="CRITICAL") | .VulnerabilityID] | unique | join(", ")')
 
             if [[ $high -eq 0 && $critical -eq 0 ]]; then
-              result+="✅ $img → No HIGH/CRITICAL vulnerabilities"$'\n'
+              result+="✅ $img → No HIGH/CRITICAL vulnerabilities"$$'\n\n'
             else
               result+="❌ $img → $high HIGH / $critical CRITICAL"$'\n'
-              result+="CVE IDs: $cves"$'\n'
+              result+="CVE IDs: $cves"$'\n\n'
               exit_code=1
             fi
           done
