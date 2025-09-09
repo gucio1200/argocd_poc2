@@ -55,17 +55,30 @@ jobs:
           done
 
           COMMENT_FILE=diff-comment.md
-          # Generate full git-style diff with proper headers
-          git -c color.ui=always diff --no-index --color=never manifests/base manifests/pr > $COMMENT_FILE || true
 
-          # fallback if empty
-          if [[ ! -s "$COMMENT_FILE" ]]; then
-            echo "No Kustomize changes detected." > $COMMENT_FILE
+          set +e
+          diff=$(git diff --no-index --color=never manifests/base manifests/pr 2>&1)
+          diff_exit_code=$?
+          set -e
+
+          # Check exit code and prepare output accordingly
+          if [[ $diff_exit_code -eq 0 ]]; then
+            output="No differences found in kustomize output after merging $GITHUB_HEAD_REF into $GITHUB_BASE_REF"
+          else
+            # Wrap diff in markdown code block for proper formatting
+            output="\`\`\`diff\n${diff}\n\`\`\`"
           fi
 
           # Escape newlines for GitHub Actions output
-          ESCAPED_COMMENT=$(sed ':a;N;$!ba;s/\n/%0A/g' $COMMENT_FILE)
-          echo "comment=$ESCAPED_COMMENT" >> $GITHUB_OUTPUT
+          escaped_output="${output//$'\n'/'%0A'}"
+
+          # Truncate if the comment is too large
+          if [ ${#escaped_output} -gt 65000 ]; then
+            escaped_output="Output is greater than 65000 characters, and therefore too large to print as a GitHub comment."
+          fi
+
+          # Write to step output
+          echo "comment=$escaped_output" >> $GITHUB_OUTPUT
 
       - name: Post Sticky PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
