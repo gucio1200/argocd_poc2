@@ -48,8 +48,9 @@ jobs:
           mkdir -p manifests/pr manifests/base
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             echo "Building manifests for $path"
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > manifests/pr/$(basename $path).yaml
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > manifests/base/$(basename $path).yaml
+            FILE=$(basename $path)
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > manifests/pr/${FILE}.yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > manifests/base/${FILE}.yaml
           done
 
       - name: Generate diffs
@@ -57,7 +58,7 @@ jobs:
         run: |
           COMMENT=""
           echo -e "\033[1;36m=== Kustomize Manifest Diff ===\033[0m"
-          for path in $kustomizations; do
+          for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             FILE=$(basename $path)
             DIFF_COLOR=$(git diff --no-index --color manifests/base/${FILE}.yaml manifests/pr/${FILE}.yaml || true)
             DIFF_PLAIN=$(git diff --no-index --color=never manifests/base/${FILE}.yaml manifests/pr/${FILE}.yaml || true)
