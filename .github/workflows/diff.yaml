@@ -1,0 +1,54 @@
+name: Kustomize Diff for Changed Kustomizations
+
+on:
+  pull_request:
+
+permissions:
+  pull-requests: write
+
+jobs:
+  kustomize-diff:
+    name: Kustomize Diff
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          path: current-branch
+          fetch-depth: 0
+
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          path: base-branch
+          fetch-depth: 0
+
+      - name: Get list of changed directories
+        id: changed
+        uses: tj-actions/changed-files@v46
+        with:
+          dir_names: "true"
+
+      - name: Setup Kustomize
+        uses: multani/action-setup-kustomize@v1
+        with:
+          version: 5.7.1
+
+      - name: Find affected kustomizations
+        id: kustomizations
+        run: |
+          KUSTOMIZATIONS=$(./.github/scripts/find_kustomization.sh "${{ steps.changed.outputs.all_changed_files }}")
+          echo "kustomizations=$KUSTOMIZATIONS" >> $GITHUB_ENV
+          echo "Affected kustomizations: $KUSTOMIZATIONS"
+
+      - name: Build manifests
+        run: |
+          mkdir -p ../manifests/pr ../manifests/base
+          for path in $kustomizations; do
+            echo "Building manifests for $path"
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone current-branch/$path > ../manifests/pr/$(basename $path).yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > ../manifests/base/$(basename $path).yaml
+          done
