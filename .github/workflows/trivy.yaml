@@ -22,14 +22,15 @@ jobs:
 
       - name: Install kustomize
         run: |
-          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash -s -- "$KUSTOMIZE_VERSION"
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash -s -- "$VERSION"
         env:
-          KUSTOMIZE_VERSION: "5.7.1"
+          VERSION: "5.7.1"
 
       - name: Install Trivy
-        uses: aquasecurity/setup-trivy@v0.2.4
+        run:
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin "$VERSION"
         with:
-          version: v0.66.0
+          VERSION: "v0.66.0"
 
       - name: Find kustomization folders
         id: find_folders
