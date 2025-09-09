@@ -1,4 +1,4 @@
-name: Kustomize Diff for Changed Kustomizations
+name: Kustomize Diff
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  kustomize-diff:
+  diff:
     name: Kustomize Diff
     runs-on: ubuntu-latest
 
