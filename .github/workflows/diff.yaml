@@ -38,10 +38,10 @@ jobs:
           path: base-branch
           fetch-depth: 0
 
-      - name: Setup Kustomize
-        uses: multani/action-setup-kustomize@v1
-        with:
-          version: 5.7.1
+
+      - name: Install kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash -s -- v5.7.1
 
       - name: Generate diffs
         id: generate-diff
