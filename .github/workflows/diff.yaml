@@ -82,7 +82,7 @@ jobs:
           echo "comment=$ESCAPED_COMMENT" >> $GITHUB_OUTPUT
 
       - id: comment
-        uses: actions/github-script@v7.0.1
+        uses: actions/github-script@v7.1.0
         env:
           OUTPUT: ${{ steps.generate-diff.outputs.comment }}
         with:
