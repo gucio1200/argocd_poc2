@@ -55,8 +55,8 @@ jobs:
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             BASENAME=$(basename "$path")
             echo "Building manifests for $path"
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path > $TMPDIR/base/$BASENAME.yaml
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path > $TMPDIR/pr/$BASENAME.yaml
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path -o $TMPDIR/base/
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path -o $TMPDIR/pr/
           done
 
           TMP_DIFF_FILE="$TMPDIR/diff-raw.txt"
