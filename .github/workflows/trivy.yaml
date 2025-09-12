@@ -26,9 +26,9 @@ jobs:
           kustomize-version: "5.7.1"
 
       - name: Install Trivy
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/setup-trivy@0.2.4
         with:
-          trivy_version: "0.66.0"
+          version: "v0.66.0"
 
       - name: Find affected kustomizations
         id: kustomizations
