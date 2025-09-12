@@ -62,12 +62,15 @@ jobs:
         run: |
           result=""
           exit_code=0
+          mkdir -p trivy-reports
 
           for img in ${{ steps.extract_images.outputs.docker_images }}; do
             echo "🔍 Scanning image: $img"
 
             # Run Trivy JSON scan
-            scan_output=$(trivy image --quiet --severity HIGH,CRITICAL --format json "$img" 2>/dev/null) || true
+            outfile="trivy-reports/$(echo $img | tr '/' '_' | tr ':' '_').json"
+            trivy image --quiet --severity HIGH,CRITICAL --format json -o "$outfile" "$img" || true
+            scan_output=$(cat "$outfile")
 
             # Count HIGH and CRITICAL vulnerabilities
             high=$(echo "$scan_output" | jq '[.Results[].Vulnerabilities[]? | select(.Severity=="HIGH")] | length')
@@ -123,6 +126,27 @@ jobs:
                 body: commentBody,
               });
             }
+
+#      - name: Upload Trivy results to DefectDojo
+#        if: ${{ steps.trivy_scan.outputs.trivy_exit_code != '' }}
+#        run: |
+#          for file in trivy-reports/*.json; do
+#            echo "📤 Uploading $file to DefectDojo..."
+#            curl -s -X POST "$DEFECTDOJO_URL/api/v2/import-scan/" \
+#              -H "Authorization: Token $DEFECTDOJO_API_KEY" \
+#              -F 'scan_type=Trivy Scan' \
+#              -F 'active=true' \
+#              -F 'verified=true' \
+#              -F "file=@${file}" \
+#              -F "engagement=$DEFECTDOJO_ENGAGEMENT_ID" \
+#              -F "minimum_severity=High" \
+#              -F "close_old_findings=false" \
+#              -F "push_to_jira=false"
+#          done
+#        env:
+#          DEFECTDOJO_URL: ${{ secrets.DEFECTDOJO_URL }}
+#          DEFECTDOJO_API_KEY: ${{ secrets.DEFECTDOJO_API_KEY }}
+#          DEFECTDOJO_ENGAGEMENT_ID: ${{ secrets.DEFECTDOJO_ENGAGEMENT_ID }}
 
       - name: Fail if vulnerabilities found
         if: ${{ steps.trivy_scan.outputs.trivy_exit_code != '0' }}
