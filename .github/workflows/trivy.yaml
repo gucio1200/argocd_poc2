@@ -1,4 +1,4 @@
-name: Trivy Image
+name: Trivy
 
 on:
   pull_request:
