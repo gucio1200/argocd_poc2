@@ -46,7 +46,7 @@ jobs:
           KUSTOMIZE_VERSION: "5.7.1"
 
       - name: Generate diffs
-        id: generate-diff
+        id: diff
         run: |
 
           TMPDIR=$(mktemp -d)
@@ -76,13 +76,15 @@ jobs:
           echo "comment<<EOF" >> "$GITHUB_OUTPUT"
           cat "$TMP_DIFF_FILE" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
 
       - name: Post PR Comment (update existing)
+        if: ${{ steps.diff.outputs.exit_code != '0' }}
         uses: actions/github-script@v7
         with:
           script: |
             const commentBody = `\`\`\`diff
-            ${{ steps.generate-diff.outputs.comment }}
+            ${{ steps.diff.outputs.comment }}
             \`\`\``;
 
             const { data: comments } = await github.rest.issues.listComments({
@@ -111,11 +113,3 @@ jobs:
                 body: bodyWithMarker,
               });
             }
-
-#      - name: Post PR Comment (update existing)
-#        uses: marocchino/sticky-pull-request-comment@v2
-#        with:
-#          message: |
-#            ```diff
-#            ${{ steps.generate-diff.outputs.comment }}
-#            ```

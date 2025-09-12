@@ -58,7 +58,7 @@ jobs:
           echo "docker_images=$images_str" >> "$GITHUB_OUTPUT"
 
       - name: Scan Docker images
-        id: trivy_scan
+        id: trivy
         run: |
           result=""
           exit_code=0
@@ -91,17 +91,17 @@ jobs:
           echo "scan_result<<EOF" >> "$GITHUB_OUTPUT"
           echo "$result" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
-          echo "trivy_exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
 
       - name: Comment PR with Trivy results
-        if: ${{ steps.trivy_scan.outputs.scan_result != '' }}
+        if: ${{ steps.trivy.outputs.scan_result != '' }}
         uses: actions/github-script@v7
         with:
           script: |
             const marker = "<!-- trivy-scan -->";
             const commentBody = `${marker}
             ## 🛡️ Trivy Scan Results
-            ${{ steps.trivy_scan.outputs.scan_result }}`;
+            ${{ steps.trivy.outputs.scan_result }}`;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
@@ -149,7 +149,7 @@ jobs:
 #          DEFECTDOJO_ENGAGEMENT_ID: ${{ secrets.DEFECTDOJO_ENGAGEMENT_ID }}
 
       - name: Fail if vulnerabilities found
-        if: ${{ steps.trivy_scan.outputs.trivy_exit_code != '0' }}
+        if: ${{ steps.trivy.outputs.exit_code != '0' }}
         run: |
           echo "❌ HIGH or CRITICAL vulnerabilities detected!"
           exit 1
