@@ -94,7 +94,7 @@ jobs:
 
       - name: Comment PR with Trivy results
         if: ${{ steps.trivy.outputs.scan_result != '' }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const marker = "<!-- trivy-scan -->";
