@@ -46,12 +46,10 @@ jobs:
       - name: Generate diffs
         id: diff
         run: |
-          TMPDIR=.$(mktemp -d)
-
           DIFF_CONTENT=""
-
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             echo "Building manifests for $path"
+            TMPDIR=.$(mktemp -d)
             clean_path="${path#./}"
             mkdir -p $TMPDIR/{base,pr}/$clean_path
 
