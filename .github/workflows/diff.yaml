@@ -83,7 +83,7 @@ jobs:
           echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
 
       - name: Post PR Comment (update existing)
-        if: ${{ steps.diff.outputs.exit_code != '0' }}
+        if: ${{ steps.diff.outputs.comment != '' }}
         uses: actions/github-script@v8
         with:
           script: |
