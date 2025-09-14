@@ -43,17 +43,17 @@ jobs:
         with:
           kustomize-version: "5.7.1"
 
+
       - name: Generate diffs
         id: diff
         run: |
           DIFF_CONTENT=""
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
-            clean_path="${path#./}"
-            header="${clean_path//\// » }"
-
             echo "Building manifests for $path"
 
             TMPDIR=.$(mktemp -d)
+            clean_path="${path#./}"
+
             mkdir -p $TMPDIR/$clean_path
             mkdir -p $TMPDIR/{base,pr}/$clean_path
 
@@ -70,9 +70,9 @@ jobs:
 
             # Fallback message if no changes
             if [[ $exit_code -eq 0 ]]; then
-              DIFF_CONTENT+="**$header**\nNo differences found\n\n"
+              DIFF_CONTENT+="### $path\nNo differences found\n\n"
             else
-              DIFF_CONTENT+="**$header**\n\`\`\`diff\n$(cat $TMP_DIFF_FILE)\n\`\`\`\n\n"
+              DIFF_CONTENT+="### $path\n$(cat $TMP_DIFF_FILE)\n\n"
             fi
           done
 
@@ -87,7 +87,9 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const commentBody = `${{ steps.diff.outputs.comment }}`;
+            const commentBody = `\`\`\`diff
+            ${{ steps.diff.outputs.comment }}
+            \`\`\``;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
