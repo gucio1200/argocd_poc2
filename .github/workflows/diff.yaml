@@ -53,14 +53,12 @@ jobs:
 
             TMPDIR=.$(mktemp -d)
             clean_path="${path#./}"
+            TMP_DIFF_FILE="$TMPDIR/diff.txt"
 
-            mkdir -p $TMPDIR/$clean_path
-            mkdir -p $TMPDIR/{base,pr}/$clean_path
+            mkdir -p $TMPDIR/{base,pr}
 
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path -o $TMPDIR/base
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path -o $TMPDIR/pr
-
-            TMP_DIFF_FILE="$TMPDIR/$clean_path/diff.txt"
 
             # Capture git diff without exiting on differences
             set +e
