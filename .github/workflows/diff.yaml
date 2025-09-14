@@ -70,9 +70,9 @@ jobs:
 
             # Fallback message if no changes
             if [[ $exit_code -eq 0 ]]; then
-              DIFF_CONTENT+="### $path\nNo differences found\n\n"
+              DIFF_CONTENT+="# $path\nNo differences found\n\n"
             else
-              DIFF_CONTENT+="### $path\n$(cat $TMP_DIFF_FILE)\n\n"
+              DIFF_CONTENT+="# $path\n$(cat $TMP_DIFF_FILE)\n\n"
             fi
           done
 
