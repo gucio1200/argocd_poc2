@@ -58,7 +58,7 @@ jobs:
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path -o $TMPDIR/base/$path
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path -o $TMPDIR/pr/$path
 
-            TMP_DIFF_FILE="$TMPDIR/diff-$path.txt"
+            TMP_DIFF_FILE="$TMPDIR/$path.txt"
 
             # Capture git diff without exiting on differences
             set +e
