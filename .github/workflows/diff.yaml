@@ -87,9 +87,9 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const commentBody = `\`\`\`diff
+            const commentBody = '```diff
             ${{ steps.diff.outputs.comment }}
-            \`\`\``;
+            ```';
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
