@@ -48,6 +48,7 @@ jobs:
         run: |
 
           TMPDIR=.$(mktemp -d)
+          mkdir -p $TMPDIR/{base,pr}
 
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             BASENAME=$(basename "$path")
