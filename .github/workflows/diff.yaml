@@ -48,15 +48,17 @@ jobs:
         run: |
           DIFF_CONTENT=""
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
-            echo "Building manifests for $path"
-            TMPDIR=.$(mktemp -d)
             clean_path="${path#./}"
+            echo "Building manifests for $path"
+
+            TMPDIR=.$(mktemp -d)
+            mkdir -p $TMPDIR/$clean_path
             mkdir -p $TMPDIR/{base,pr}/$clean_path
 
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path -o $TMPDIR/base/$clean_path
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path -o $TMPDIR/pr/$clean_path
 
-            TMP_DIFF_FILE="$TMPDIR/$clean_path.txt"
+            TMP_DIFF_FILE="$TMPDIR/$clean_path/diff.txt"
 
             # Capture git diff without exiting on differences
             set +e
