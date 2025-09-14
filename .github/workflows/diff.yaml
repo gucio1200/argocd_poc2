@@ -48,10 +48,9 @@ jobs:
         run: |
 
           TMPDIR=.$(mktemp -d)
-          mkdir -p $TMPDIR/{base,pr}
+#          mkdir -p $TMPDIR/{base,pr}
 
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
-            BASENAME=$(basename "$path")
             echo "Building manifests for $path"
             mkdir -p $TMPDIR/{base,pr}/$path
             kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path -o $TMPDIR/base/$path
