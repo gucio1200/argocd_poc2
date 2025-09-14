@@ -88,7 +88,7 @@ jobs:
         with:
           script: |
             const marker = "<!-- diff-comment -->";
-            const diffComment = JSON.parse(JSON.stringify("${{ steps.diff.outputs.comment }}"));
+            const diffComment = inputs.comment;
             const commentBody = marker + "\n```diff\n" + diffComment + "\n```";
 
             const { data: comments } = await github.rest.issues.listComments({
@@ -114,3 +114,5 @@ jobs:
                 body: commentBody,
               });
             }
+          inputs:
+            comment: ${{ steps.diff.outputs.comment }}
