@@ -49,6 +49,8 @@ jobs:
           DIFF_CONTENT=""
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             clean_path="${path#./}"
+            header="${clean_path//\// » }"
+
             echo "Building manifests for $path"
 
             TMPDIR=.$(mktemp -d)
@@ -68,9 +70,9 @@ jobs:
 
             # Fallback message if no changes
             if [[ $exit_code -eq 0 ]]; then
-              DIFF_CONTENT+="### $path\nNo differences found\n\n"
+              DIFF_CONTENT+="**$header**\nNo differences found\n\n"
             else
-              DIFF_CONTENT+="### $path\n$(cat $TMP_DIFF_FILE)\n\n"
+              DIFF_CONTENT+="**$header**\n\`\`\`diff\n$(cat $TMP_DIFF_FILE)\n\`\`\`\n\n"
             fi
           done
 
@@ -85,9 +87,7 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const commentBody = `\`\`\`diff
-            ${{ steps.diff.outputs.comment }}
-            \`\`\``;
+            const commentBody = `${{ steps.diff.outputs.comment }}`;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
