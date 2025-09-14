@@ -48,7 +48,6 @@ jobs:
         run: |
 
           TMPDIR=.$(mktemp -d)
-#          mkdir -p $TMPDIR/{base,pr}
 
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             echo "Building manifests for $path"
