@@ -47,7 +47,7 @@ jobs:
         id: diff
         run: |
 
-          TMPDIR=$(mktemp -d)
+          TMPDIR=./$(mktemp -d)
           mkdir -p $TMPDIR/base $TMPDIR/pr
 
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
