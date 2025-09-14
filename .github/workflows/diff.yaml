@@ -48,13 +48,13 @@ jobs:
         run: |
 
           TMPDIR=.$(mktemp -d)
-          mkdir -p $TMPDIR/base $TMPDIR/pr
 
           for path in ${{ steps.kustomizations.outputs.kustomizations }}; do
             BASENAME=$(basename "$path")
             echo "Building manifests for $path"
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path -o $TMPDIR/base/
-            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path -o $TMPDIR/pr/
+            mkdir -p $TMPDIR/{base,pr}/$path
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone base-branch/$path -o $TMPDIR/base/$path
+            kustomize build --enable-helm --load-restrictor LoadRestrictionsNone $path -o $TMPDIR/pr/$path
           done
 
           TMP_DIFF_FILE="$TMPDIR/diff-raw.txt"
