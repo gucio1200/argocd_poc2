@@ -64,7 +64,7 @@ jobs:
 
             # Capture git diff without exiting on differences
             set +e
-            git diff --no-index --color=never --no-renames $TMPDIR/base/$clean_path $TMPDIR/pr/$clean_path > $TMP_DIFF_FILE 2>&1
+            git diff --no-index --color=never $TMPDIR/base/$clean_path $TMPDIR/pr/$clean_path > $TMP_DIFF_FILE 2>&1
             exit_code=$?
             set -e
 
