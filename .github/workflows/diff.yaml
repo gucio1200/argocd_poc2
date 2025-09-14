@@ -85,10 +85,12 @@ jobs:
       - name: Post PR Comment (update existing)
         if: ${{ steps.diff.outputs.comment != '' }}
         uses: actions/github-script@v8
+        env:
+          DIFF_COMMENT: ${{ steps.diff.outputs.comment }}
         with:
           script: |
             const marker = "<!-- diff-comment -->";
-            const diffComment = inputs.comment;
+            const diffComment = process.env.DIFF_COMMENT;
             const commentBody = marker + "\n```diff\n" + diffComment + "\n```";
 
             const { data: comments } = await github.rest.issues.listComments({
@@ -114,5 +116,3 @@ jobs:
                 body: commentBody,
               });
             }
-          inputs:
-            comment: ${{ steps.diff.outputs.comment }}
