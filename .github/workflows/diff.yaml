@@ -87,9 +87,9 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const commentBody = '```diff
-            ${{ steps.diff.outputs.comment }}
-            ```';
+            const marker = "<!-- diff-comment -->";
+            const diffComment = `${{ steps.diff.outputs.comment }}`;
+            const commentBody = marker + "\n```diff\n" + diffComment + "\n```"
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
@@ -98,8 +98,6 @@ jobs:
             });
 
             // Find an existing comment made by this workflow (marker in body recommended)
-            const marker = "<!-- diff-comment -->";
-            const bodyWithMarker = `${marker}\n${commentBody}`;
             const existingComment = comments.find(c => c.body.includes(marker));
 
             if (existingComment) {
