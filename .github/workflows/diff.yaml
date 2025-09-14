@@ -89,7 +89,7 @@ jobs:
           script: |
             const marker = "<!-- diff-comment -->";
             const diffComment = `${{ steps.diff.outputs.comment }}`;
-            const commentBody = marker + "\n```diff\n" + diffComment + "\n```"
+            const commentBody = marker + "\n```diff\n" + diffComment + "\n```";
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
@@ -97,7 +97,6 @@ jobs:
               issue_number: context.issue.number,
             });
 
-            // Find an existing comment made by this workflow (marker in body recommended)
             const existingComment = comments.find(c => c.body.includes(marker));
 
             if (existingComment) {
@@ -105,13 +104,13 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 comment_id: existingComment.id,
-                body: bodyWithMarker,
+                body: commentBody,
               });
             } else {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                body: bodyWithMarker,
+                body: commentBody,
               });
             }
