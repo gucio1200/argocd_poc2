@@ -42,5 +42,13 @@
         "phase: {{ lookup (split packageFileDir '/') 3 }}"
        ]
     },
+    {
+      "matchDatasources": ["helm", "docker"],
+      "matchPackageNames": [
+        "public.ecr.aws/dynatrace/dynatrace-operator",
+        "dynatrace-operator"
+      ],
+      "extractVersion": "^v?(?<version>.*)$"
+    },
   ]
 }
