@@ -4,7 +4,7 @@ kind: Kustomization
 
 helmCharts:
   - name: dynatrace-operator
-    repo: oci://public.ecr.aws/dynatrace/dynatrace-operator
+    repo: oci://public.ecr.aws/dynatrace
     version: "1.6.1"
     releaseName: dynatrace
     includeCRDs: true
