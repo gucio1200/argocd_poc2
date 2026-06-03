@@ -29,7 +29,7 @@ jobs:
           kustomize-version: "5.7.1"
 
       - name: Install Trivy
-        uses: aquasecurity/setup-trivy@v0.3.0
+        uses: aquasecurity/setup-trivy@v0.3.1
         with:
           version: "v0.66.0"
           cache: true
