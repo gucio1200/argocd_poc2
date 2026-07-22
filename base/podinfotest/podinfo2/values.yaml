@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/stefanprodan/podinfo
-  tag: 6.8.0
+  tag: 6.14.1
 
 replicaCount: 2
 resources:
