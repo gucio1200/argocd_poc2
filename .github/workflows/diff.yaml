@@ -84,7 +84,7 @@ jobs:
 
       - name: Post PR Comment (update existing)
         if: ${{ steps.diff.outputs.comment != '' }}
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           DIFF_COMMENT: ${{ steps.diff.outputs.comment }}
         with:
